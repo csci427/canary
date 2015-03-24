@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="edu.umt.csci427.canary.ThresholdFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/fragment_threshold_alert_title"
+        android:id="@+id/thresholdAlertTextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="40dp"
+        android:gravity="center"
+        android:layout_alignBottom="@+id/thresholdAlarmTextView"
+        android:padding="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/fragment_threshold_alarm_title"
+        android:id="@+id/thresholdAlarmTextView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:textSize="40dp"
+        android:padding="50dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/thresholdAlertEditText"
+        android:layout_alignBottom="@+id/thresholdAlertTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="68dp"
+        android:layout_marginStart="68dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/thresholdAlarmEditText"
+        android:gravity="center"
+        android:editable="false"
+        android:layout_marginLeft="82dp"
+        android:layout_marginStart="82dp"
+        android:layout_alignBottom="@+id/thresholdAlarmTextView"
+        android:layout_alignLeft="@+id/thresholdAlarmTextView"
+        android:layout_alignStart="@+id/thresholdAlarmTextView" />
+
+</RelativeLayout>

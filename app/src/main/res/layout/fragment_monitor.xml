@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="edu.umt.csci427.canary.MonitorFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_width="344dp"
+        android:layout_height="138dp"
+        android:textAppearance="@android:style/TextAppearance.Holo.Large"
+        android:text="62 bps"
+        android:id="@+id/monitorMainTextView"
+        android:layout_gravity="center"
+        android:clickable="true"
+        android:numeric="decimal"
+        android:textSize="80dp"
+        android:textAlignment="center"
+        android:gravity="center" />
+</FrameLayout>

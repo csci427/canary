@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:id="@+id/container"
     android:layout_width="match_parent" android:layout_height="match_parent"
     tools:context=".MainActivity" tools:ignore="MergeRootFrame"
@@ -10,6 +10,10 @@
         android:id="@+id/lastUpdatedTextClock"
         android:layout_gravity="center_horizontal|bottom"
         android:textSize="40dp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="380dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="479dp" />
 
-</FrameLayout>
+</RelativeLayout>

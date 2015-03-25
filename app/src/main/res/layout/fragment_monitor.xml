@@ -1,19 +1,44 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="edu.umt.csci427.canary.MonitorFragment">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
+    android:layout_height="fill_parent" tools:context="edu.umt.csci427.canary.MonitorFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:layout_width="344dp"
+        android:layout_width="212dp"
         android:layout_height="138dp"
         android:textAppearance="@android:style/TextAppearance.Holo.Large"
-        android:text="62 bps"
-        android:id="@+id/monitorMainTextView"
+        android:text="VAL"
+        android:id="@+id/monitorValueTextView"
         android:layout_gravity="center"
         android:clickable="true"
-        android:numeric="decimal"
         android:textSize="80dp"
         android:textAlignment="center"
-        android:gravity="center" />
-</FrameLayout>
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/monitorUnitsTextView"
+        android:layout_toStartOf="@+id/monitorUnitsTextView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="UNITS"
+        android:id="@+id/monitorUnitsTextView"
+        android:textSize="70dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="319dp"
+        android:layout_marginEnd="319dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="TITLE"
+        android:id="@+id/monitorTitleTextView"
+        android:layout_above="@+id/monitorValueTextView"
+        android:layout_centerHorizontal="true"
+        android:textSize="50dp" />
+</RelativeLayout>

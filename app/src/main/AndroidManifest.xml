@@ -31,6 +31,12 @@
             android:name=".AddMonitorActivity"
             android:label="@string/title_activity_add_monitor" >
         </activity>
+
+        <receiver
+            android:name=".OpenICEIntentReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
     </application>
 
 </manifest>

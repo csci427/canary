@@ -19,8 +19,7 @@ public class AddMonitorFragment extends DialogFragment {
         builder.setTitle(R.string.add_monitor_menu_item)
                 .setItems(R.array.monitor_list, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position
-                        // of the selected item
+                         aml.onMonitorListClick(AddMonitorFragment.this, which);
                     }
                 });
         return builder.create();
@@ -31,7 +30,7 @@ public class AddMonitorFragment extends DialogFragment {
 
 
     public interface AddMonitorListener {
-        public void onClick(DialogFragment dialog, int which);
+        public void onMonitorListClick(DialogFragment dialog, int which);
             // The 'which' argument contains the index position
             // of the selected item
     }

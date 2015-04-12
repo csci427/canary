@@ -1,6 +1,7 @@
 package edu.umt.csci427.canary;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.DialogFragment;
@@ -14,20 +15,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity implements
         MonitorFragment.OnFragmentInteractionListener,
-        ThresholdFragment.OnFragmentInteractionListener {
+        ThresholdFragment.OnFragmentInteractionListener,
+        AddMonitorFragment.AddMonitorListener {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             //getSupportFragmentManager().beginTransaction()
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, MonitorFragment.newInstance("title1", "some", 1.2f))
-                    .commit();
+            //getFragmentManager().beginTransaction()
+            //        .add(R.id.container, MonitorFragment.newInstance("title1", "some", 1.2f))
+            //        .commit();
+
+
+        }
+        else
+        {
+
         }
     }
 
@@ -52,8 +61,6 @@ public class MainActivity extends ActionBarActivity implements
         }
         else if (id == R.id.add_monitor)
         {
-            //Intent intent = new Intent(this, AddMonitorActivity.class);
-            //startActivity(intent);
             DialogFragment addMonitorFrag = new AddMonitorFragment();
             addMonitorFrag.show(getSupportFragmentManager(), "monitors");
 
@@ -69,6 +76,14 @@ public class MainActivity extends ActionBarActivity implements
         return;
     }
 
+    @Override
+    public void onMonitorListClick(DialogFragment dialog, int which)
+    {
+
+        getFragmentManager().beginTransaction()
+                .add(R.id.container, MonitorFragment.newInstance("title1", "some", 1.2f))
+                .commit();
+    }
 
 
 }

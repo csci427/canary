@@ -1,12 +1,16 @@
 package edu.umt.csci427.canary;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.content.Context;
+import android.content.Intent;
 
 
 /**
@@ -25,6 +29,7 @@ public class MonitorFragment extends Fragment {
     private static final String ARG_PARAM3 = "value";
 
     private Monitor monitor;
+    private BroadcastReceiver receiver;
 
     private OnFragmentInteractionListener mListener;
 
@@ -45,6 +50,11 @@ public class MonitorFragment extends Fragment {
         args.putString(ARG_PARAM2, units);
         args.putFloat(ARG_PARAM3, value);
         fragment.setArguments(args);
+
+
+
+
+
         return fragment;
     }
 
@@ -61,6 +71,15 @@ public class MonitorFragment extends Fragment {
                     getArguments().getString(ARG_PARAM2),
                     getArguments().getFloat(ARG_PARAM3)
             );
+
+
+
+            Fragment v = getFragmentManager().findFragmentById(this.getId());
+            View vv = v.getView();
+            View i = vv.findViewById(R.id.monitorValueTextView);
+            TextView tv = (TextView)i;
+
+            this.receiver = new OpenICEIntentReceiver(this, (TextView)getView().findViewById(R.id.monitorValueTextView));
         }
 
     }
@@ -71,13 +90,14 @@ public class MonitorFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_monitor, container, false);
     }
 
+    /*
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
     }
-
+*/
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

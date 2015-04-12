@@ -1,6 +1,7 @@
 package edu.umt.csci427.canary;
 
 
+
 import android.net.Uri;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -24,15 +25,6 @@ public class MainActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            //getSupportFragmentManager().beginTransaction()
-            //getFragmentManager().beginTransaction()
-            //        .add(R.id.container, MonitorFragment.newInstance("title1", "some", 1.2f))
-            //        .commit();
-
-
-        }
-        else
-        {
 
         }
     }
@@ -68,18 +60,23 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri)
+    public void onFragmentInteraction()
     {
-        return;
+        getFragmentManager().beginTransaction()
+                .add(R.id.container, ThresholdFragment.newInstance("bogus1", "bogus2"))
+                .commit();
     }
 
     @Override
-    public void onMonitorListClick(DialogFragment dialog, int which)
-    {
+    public void onFragmentInteraction(Uri uri)
+    {}
+
+
+    @Override
+    public void onMonitorListClick(DialogFragment dialog, int which) {
         getFragmentManager().beginTransaction()
                 .add(R.id.container, MonitorFragment.newInstance("title1", "some", 1.2f))
                 .commit();
-
     }
 
 

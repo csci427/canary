@@ -5,8 +5,8 @@
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:layout_width="212dp"
-        android:layout_height="138dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textAppearance="@android:style/TextAppearance.Holo.Large"
         android:text="VAL"
         android:id="@+id/monitorValueTextView"
@@ -15,10 +15,9 @@
         android:textSize="50dp"
         android:textAlignment="center"
         android:gravity="center"
-        android:layout_alignRight="@+id/monitorTitleTextView"
-        android:layout_alignEnd="@+id/monitorTitleTextView"
         android:layout_alignTop="@+id/monitorUnitsTextView"
-        android:layout_alignBottom="@+id/monitorUnitsTextView" />
+        android:layout_toLeftOf="@+id/monitorTitleTextView"
+        android:layout_toStartOf="@+id/monitorTitleTextView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,10 +27,8 @@
         android:id="@+id/monitorUnitsTextView"
         android:textSize="50dp"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="319dp"
-        android:layout_marginEnd="319dp" />
+        android:layout_toRightOf="@+id/monitorTitleTextView"
+        android:layout_toEndOf="@+id/monitorTitleTextView" />
 
     <TextView
         android:layout_width="wrap_content"

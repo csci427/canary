@@ -36,7 +36,7 @@ public class OpenICEIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String data = intent.getStringExtra("ICE_DATA");
+        String data = intent.getStringExtra("com.example.openiceservicev3.ICE_DATA");
         dataView.setText(data);
     }
 }

@@ -3,7 +3,6 @@ package edu.umt.csci427.canary;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -11,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.content.Context;
-import android.content.Intent;
 
 
 /**
@@ -86,6 +83,12 @@ public class MonitorFragment extends Fragment {
         super.onStart();
         this.receiver = new OpenICEIntentReceiver(this, (TextView)getView().findViewById(R.id.monitorValueTextView));
         LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(receiver, new IntentFilter("com.example.openiceservicev3.ICE_DATA"));
+
+        TextView valTv;
+        valTv = (TextView)getView().findViewById(R.id.monitorTitleTextView);
+        valTv.setText(monitor.getTitle());
+        valTv = (TextView)getView().findViewById(R.id.monitorUnitsTextView);
+        valTv.setText(monitor.getUnits());
     }
 
     @Override
@@ -115,7 +118,7 @@ public class MonitorFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(Uri uri);
+        public void onFragmentInteraction();
     }
 
 }

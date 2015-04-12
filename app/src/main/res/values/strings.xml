@@ -5,7 +5,14 @@
     <string name="action_debug">Debug</string>
     <string name="fragment_threshold_alarm_title">Alarm Threshold</string>
     <string name="fragment_threshold_alert_title">Alert Threshold</string>
+    <string name="add_monitor_menu_item">Add Monitor</string>
+    <string name="title_activity_add_monitor">Add Monitor</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="monitor_list">
+        <item>Pulse Ox</item>
+        <item>ECG</item>
+        <item>Blood Pressure</item>
+        <item>O2/CO2</item>
+    </string-array>
+
 </resources>

@@ -1,6 +1,9 @@
 package edu.umt.csci427.canary;
 
+
+import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -13,9 +16,10 @@ import android.view.ViewGroup;
 import android.os.Build;
 
 
-public class MainActivity extends ActionBarActivity implements MonitorFragment.OnFragmentInteractionListener {
+public class MainActivity extends ActionBarActivity implements
+        MonitorFragment.OnFragmentInteractionListener,
+        ThresholdFragment.OnFragmentInteractionListener {
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -46,8 +50,13 @@ public class MainActivity extends ActionBarActivity implements MonitorFragment.O
         if (id == R.id.action_settings) {
             return true;
         }
-        else if (id == R.id.action_debug)
+        else if (id == R.id.add_monitor)
         {
+            //Intent intent = new Intent(this, AddMonitorActivity.class);
+            //startActivity(intent);
+            DialogFragment addMonitorFrag = new AddMonitorFragment();
+            addMonitorFrag.show(getSupportFragmentManager(), "monitors");
+
             return true;
         }
 
@@ -59,5 +68,7 @@ public class MainActivity extends ActionBarActivity implements MonitorFragment.O
     {
         return;
     }
+
+
 
 }

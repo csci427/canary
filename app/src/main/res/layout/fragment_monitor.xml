@@ -12,12 +12,13 @@
         android:id="@+id/monitorValueTextView"
         android:layout_gravity="center"
         android:clickable="true"
-        android:textSize="80dp"
+        android:textSize="50dp"
         android:textAlignment="center"
         android:gravity="center"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/monitorUnitsTextView"
-        android:layout_toStartOf="@+id/monitorUnitsTextView" />
+        android:layout_alignRight="@+id/monitorTitleTextView"
+        android:layout_alignEnd="@+id/monitorTitleTextView"
+        android:layout_alignTop="@+id/monitorUnitsTextView"
+        android:layout_alignBottom="@+id/monitorUnitsTextView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,7 +26,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="UNITS"
         android:id="@+id/monitorUnitsTextView"
-        android:textSize="70dp"
+        android:textSize="50dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -40,5 +41,5 @@
         android:id="@+id/monitorTitleTextView"
         android:layout_above="@+id/monitorValueTextView"
         android:layout_centerHorizontal="true"
-        android:textSize="50dp" />
+        android:textSize="30dp" />
 </RelativeLayout>

@@ -27,6 +27,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.umt.csci427.canary.MainActivity" />
         </activity>
+        <activity
+            android:name=".AddMonitorActivity"
+            android:label="@string/title_activity_add_monitor" >
+        </activity>
     </application>
 
 </manifest>

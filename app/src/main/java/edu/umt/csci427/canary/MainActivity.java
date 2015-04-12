@@ -2,6 +2,7 @@ package edu.umt.csci427.canary;
 
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -25,7 +26,11 @@ public class MainActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
+            Intent intent = new Intent(this, OpenICEService.class);
+            startService(intent);
 
+            Intent startServiceIntent = new Intent(this, AlertService.class);
+            startService(startServiceIntent);
         }
     }
 

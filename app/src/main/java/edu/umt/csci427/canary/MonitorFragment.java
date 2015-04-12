@@ -82,7 +82,7 @@ public class MonitorFragment extends Fragment {
     {
         super.onStart();
         this.receiver = new OpenICEIntentReceiver(this, (TextView)getView().findViewById(R.id.monitorValueTextView));
-        LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(receiver, new IntentFilter("com.example.openiceservicev3.ICE_DATA"));
+        LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(receiver, new IntentFilter(OpenICE.ICE_DATA));
 
         TextView valTv;
         valTv = (TextView)getView().findViewById(R.id.monitorTitleTextView);

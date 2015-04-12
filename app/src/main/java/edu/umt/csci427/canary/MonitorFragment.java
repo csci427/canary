@@ -2,9 +2,11 @@ package edu.umt.csci427.canary;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,10 +53,6 @@ public class MonitorFragment extends Fragment {
         args.putFloat(ARG_PARAM3, value);
         fragment.setArguments(args);
 
-
-
-
-
         return fragment;
     }
 
@@ -72,14 +70,6 @@ public class MonitorFragment extends Fragment {
                     getArguments().getFloat(ARG_PARAM3)
             );
 
-
-
-            Fragment v = getFragmentManager().findFragmentById(this.getId());
-            View vv = v.getView();
-            View i = vv.findViewById(R.id.monitorValueTextView);
-            TextView tv = (TextView)i;
-
-            this.receiver = new OpenICEIntentReceiver(this, (TextView)getView().findViewById(R.id.monitorValueTextView));
         }
 
     }
@@ -90,14 +80,14 @@ public class MonitorFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_monitor, container, false);
     }
 
-    /*
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        this.receiver = new OpenICEIntentReceiver(this, (TextView)getView().findViewById(R.id.monitorValueTextView));
+        LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(receiver, new IntentFilter("com.example.openiceservicev3.ICE_DATA"));
     }
-*/
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -125,7 +115,6 @@ public class MonitorFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 

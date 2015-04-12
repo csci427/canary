@@ -1,10 +1,9 @@
 package edu.umt.csci427.canary;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -12,10 +11,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.TextView;
+
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity implements
@@ -79,10 +76,10 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onMonitorListClick(DialogFragment dialog, int which)
     {
-
         getFragmentManager().beginTransaction()
                 .add(R.id.container, MonitorFragment.newInstance("title1", "some", 1.2f))
                 .commit();
+
     }
 
 

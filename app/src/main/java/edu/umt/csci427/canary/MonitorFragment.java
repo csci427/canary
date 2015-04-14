@@ -1,16 +1,15 @@
 package edu.umt.csci427.canary;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,9 +25,9 @@ public class MonitorFragment extends Fragment {
     private static final String ARG_PARAM1 = "title";
     private static final String ARG_PARAM2 = "units";
     private static final String ARG_PARAM3 = "value";
+    private static final String ARG_PARAM4 = "metric_id";
 
     private Monitor monitor;
-    private BroadcastReceiver receiver;
 
     private OnFragmentInteractionListener mListener;
 
@@ -39,15 +38,18 @@ public class MonitorFragment extends Fragment {
      * @param title Title which will be displayed in the monitor.
      * @param units Units the value uses, if applicable.
      * @param value Value of the monitor.
+     * @param metric_id Action of broadcasts that we should receive
      * @return A new instance of fragment MonitorFragment.
      */
 
-    public static MonitorFragment newInstance(String title, String units, float value) {
+    public static MonitorFragment newInstance(String title, String units, float value,
+                                              String metric_id) {
         MonitorFragment fragment = new MonitorFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, title);
         args.putString(ARG_PARAM2, units);
         args.putFloat(ARG_PARAM3, value);
+        args.putString(ARG_PARAM4, metric_id);
         fragment.setArguments(args);
 
         return fragment;
@@ -64,11 +66,10 @@ public class MonitorFragment extends Fragment {
             monitor = Monitor.newInstance(
                     getArguments().getString(ARG_PARAM1),
                     getArguments().getString(ARG_PARAM2),
-                    getArguments().getFloat(ARG_PARAM3)
+                    getArguments().getFloat(ARG_PARAM3),
+                    getArguments().getString(ARG_PARAM4)
             );
-
         }
-
     }
 
     @Override
@@ -81,8 +82,12 @@ public class MonitorFragment extends Fragment {
     public void onStart()
     {
         super.onStart();
-        this.receiver = new OpenICEIntentReceiver(this, (TextView)getView().findViewById(R.id.monitorValueTextView));
-        LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(receiver, new IntentFilter(OpenICE.ICE_DATA));
+
+        BroadcastReceiver receiver = new OpenICEIntentReceiver(this,
+                (TextView)getView().findViewById(R.id.monitorValueTextView));
+
+        LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(receiver,
+                new IntentFilter(monitor.getMetric_id()));
 
         TextView valTv;
         valTv = (TextView)getView().findViewById(R.id.monitorTitleTextView);

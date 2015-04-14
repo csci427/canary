@@ -68,12 +68,14 @@ public class OpenICE implements Runnable {
     private Service parentService;
     static final public String ICE_DATA = "ICE_DATA";
 
+    // intent action to store metric value in an intent
+    static final public String METRIC_VALUE = "METRIC_VALUE";
+
     public OpenICE(Context context, int domain, Service serv){
         this.domainId = domain;
         this.ActivityContext = context;
         this.parentService = serv;
         this.broadcaster = LocalBroadcastManager.getInstance(parentService);
-
     }
 
 
@@ -195,9 +197,24 @@ public class OpenICE implements Runnable {
                             ice.Numeric data = (ice.Numeric) n_data_seq.get(i);
                             // If the updated sample status contains fresh data that we can evaluate
                             if (si.valid_data) {
+
+                                Log.v(this.getClass().getSimpleName(), data.metric_id + " " + data.value);
+
+                                // Broadcast intent with metric_id of data received as action.
+                                Intent myIntent = new Intent(data.metric_id);
+                                myIntent.putExtra(METRIC_VALUE, (double) data.value);
+
+                                try {
+                                    this.broadcaster.sendBroadcast(myIntent);
+                                } catch (Exception ex) {
+                                    Log.v("ZZZ", "EXCEPTION" + ex.toString());
+                                }
+
+                                /*
                                 PulseOximeterFactory myPulseFactory = new PulseOximeterFactory();//TODO: create on the fly
                                 //SEND THE DATA!!!
                                 this.SendIntentWithOpenICEData(CreateIntentFromDataPackage(myPulseFactory.PackageOpenICESimulatedData(data)));
+                                */
 
                                // System.out.println(data);
                             }

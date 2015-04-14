@@ -4,17 +4,16 @@ package edu.umt.csci427.canary;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.List;
+import rosetta.MDC_ECG_HEART_RATE;
+import rosetta.MDC_PRESS_CUFF_SYS;
+import rosetta.MDC_PULS_OXIM_PULS_RATE;
+import rosetta.MDC_PULS_OXIM_SAT_O2;
 
 
 public class MainActivity extends ActionBarActivity implements
@@ -26,6 +25,8 @@ public class MainActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
+
+
             Intent intent = new Intent(this, OpenICEService.class);
             startService(intent);
 
@@ -79,8 +80,39 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onMonitorListClick(DialogFragment dialog, int which) {
+
+        // TODO: These are horrible hard coded magic numbers... fix it... someone... besides me
+
+        String title = "";
+        String units = "";
+        String metric_id = "";
+
+        switch (which){
+            case 0:
+                title = "Pulse rate (ox)";
+                units = "BPM";
+                metric_id = MDC_PULS_OXIM_PULS_RATE.VALUE;
+                break;
+            case 1:
+                title = "Heart (ECG)";
+                units = "BPM";
+                metric_id = MDC_ECG_HEART_RATE.VALUE;
+                break;
+            case 2:
+                title = "SpO2 (ox)";
+                units = "%";
+                metric_id = MDC_PULS_OXIM_SAT_O2.VALUE;
+                break;
+            case 3:
+                title = "Sys BP (cuff)";
+                units = "mmHg";
+                metric_id = MDC_PRESS_CUFF_SYS.VALUE;
+                break;
+        }
+
+
         getFragmentManager().beginTransaction()
-                .add(R.id.container, MonitorFragment.newInstance("title1", "some", 1.2f))
+                .add(R.id.container, MonitorFragment.newInstance(title, units, 1.2f, metric_id))
                 .commit();
     }
 

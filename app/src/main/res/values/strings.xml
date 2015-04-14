@@ -9,10 +9,10 @@
     <string name="title_activity_add_monitor">Add Monitor</string>
 
     <string-array name="monitor_list">
-        <item>Pulse Ox</item>
-        <item>ECG</item>
-        <item>Blood Pressure</item>
-        <item>O2/CO2</item>
+        <item>Pulse rate from pulse oximeter</item>
+        <item>Heart rate from ECG</item>
+        <item>SpO2 from pulse oximeter</item>
+        <item>Systolic BP from cuff</item>
     </string-array>
 
 </resources>

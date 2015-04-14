@@ -21,9 +21,6 @@ public class OpenICEIntentReceiver extends BroadcastReceiver {
     private Activity MainActivity; ///Needs main activity to become registered
     private Fragment MonitorFrag;
 
-    public OpenICEIntentReceiver() {
-    }
-
     public OpenICEIntentReceiver(Activity mainActivity, TextView tv){
         if(mainActivity != null) this.MainActivity = mainActivity;
         if(tv != null) this.dataView = tv;
@@ -36,7 +33,8 @@ public class OpenICEIntentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String data = intent.getStringExtra("ICE_DATA");
-        dataView.setText(data);
+
+        Double data = intent.getDoubleExtra(OpenICE.METRIC_VALUE, -1);
+        dataView.setText(Double.toString(data));
     }
 }

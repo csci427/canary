@@ -9,10 +9,11 @@ import java.util.List;
 public class ViewManager
 {
 
-    public static final int MAX_MONITORS = 4;
+    public static final int MAX_MONITORS = 2;
 
     private static List<MonitorFragment> monitors = new ArrayList<>();
     private static int mCOUNT() { return monitors.size(); }
+    public static MonitorFragment getFragmentReference(int id) { return monitors.get(id); }
     private static MainActivity main;
 
     public static void attachMainActivity(MainActivity main) { ViewManager.main = main; }

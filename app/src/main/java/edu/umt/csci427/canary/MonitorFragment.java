@@ -1,8 +1,11 @@
 package edu.umt.csci427.canary;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -102,8 +106,29 @@ public class MonitorFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getFragmentManager().beginTransaction()
+                        .hide(getFragmentManager().findFragmentByTag(monitor.getTitle()));
+                getFragmentManager().beginTransaction()
                         .add(R.id.container, ThresholdFragment.newInstance("bogus1", "bogus2"))
                         .commit();
+                getFragmentManager().executePendingTransactions();
+            }
+        });
+        invisButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                new AlertDialog.Builder(v.getContext())
+                        .setTitle("Remove Fragment")
+                        .setMessage("Do you want to remove monitor?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                getFragmentManager().beginTransaction()
+                                        .remove(getFragmentManager().findFragmentByTag(monitor.getTitle()))
+                                        .commit();
+                                getFragmentManager().executePendingTransactions();
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+                return true;
             }
         });
 

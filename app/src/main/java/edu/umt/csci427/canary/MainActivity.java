@@ -24,14 +24,14 @@ public class MainActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null)
         {
-
-        }
-        else
-        {
             Intent intent = new Intent(this, OpenICEService.class);
             startService(intent);
             Intent startServiceIntent = new Intent(this, AlertService.class);
             startService(startServiceIntent);
+        }
+        else
+        {
+
         }
     }
 
@@ -117,7 +117,7 @@ public class MainActivity extends ActionBarActivity implements
 
 
         getFragmentManager().beginTransaction()
-                .add(R.id.container, MonitorFragment.newInstance(title, units, 1.2f, metric_id))
+                .add(R.id.container, MonitorFragment.newInstance(title, units, 1.2f, metric_id), title)
                 .commit();
     }
 

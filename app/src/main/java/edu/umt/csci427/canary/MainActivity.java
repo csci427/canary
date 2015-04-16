@@ -118,6 +118,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onDestroy(){
         stopService(new Intent(this, OpenICEService.class));
+        super.onDestroy();
     }
 
 

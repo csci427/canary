@@ -124,6 +124,7 @@ public class MonitorFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction();
+        public void launchThresholdOnClick();
     }
 
 }

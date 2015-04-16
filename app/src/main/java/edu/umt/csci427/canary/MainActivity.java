@@ -1,7 +1,5 @@
 package edu.umt.csci427.canary;
 
-
-
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.DialogFragment;
@@ -70,6 +68,12 @@ public class MainActivity extends ActionBarActivity implements
         getFragmentManager().beginTransaction()
                 .add(R.id.container, ThresholdFragment.newInstance("bogus1", "bogus2"))
                 .commit();
+    }
+
+    @Override
+    public void launchThresholdOnClick()
+    {
+        onFragmentInteraction();
     }
 
     @Override

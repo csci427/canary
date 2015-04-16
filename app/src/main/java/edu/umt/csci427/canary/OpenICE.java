@@ -59,14 +59,10 @@ public class OpenICE implements Runnable {
     private ice.SampleArraySeq sa_data_seq = null;
     private ice.NumericSeq n_data_seq = null;
     private SampleInfoSeq info_seq = null;
-    private Handler handle = null;
 
-
-    private OpenICEAbstractFactory deviceFactory = null;
     //Sends out intents
     private LocalBroadcastManager broadcaster;
     private Service parentService;
-    static final public String ICE_DATA = "ICE_DATA";
 
     // intent action to store metric value in an intent
     static final public String METRIC_VALUE = "METRIC_VALUE";
@@ -200,22 +196,11 @@ public class OpenICE implements Runnable {
 
                                 Log.v(this.getClass().getSimpleName(), data.metric_id + " " + data.value);
 
-                                // Broadcast intent with metric_id of data received as action.
-                                Intent myIntent = new Intent(data.metric_id);
-                                myIntent.putExtra(METRIC_VALUE, (double) data.value);
-
-                                try {
-                                    this.broadcaster.sendBroadcast(myIntent);
-                                } catch (Exception ex) {
-                                    Log.v("ZZZ", "EXCEPTION" + ex.toString());
-                                }
-
-                                /*
-                                PulseOximeterFactory myPulseFactory = new PulseOximeterFactory();//TODO: create on the fly
-                                //SEND THE DATA!!!
-                                this.SendIntentWithOpenICEData(CreateIntentFromDataPackage(myPulseFactory.PackageOpenICESimulatedData(data)));
-                                */
-
+                                ///Broadcast an intent to the Media player fragments
+                                this.SendIntentWithOpenICEData(
+                                        ///Create the intent from valid data.
+                                        this.CreateIntentFromICEData(data)
+                                );
                                // System.out.println(data);
                             }
 
@@ -235,23 +220,22 @@ public class OpenICE implements Runnable {
 
     /***********************************************
      * Create the intent to send to the service
-     * @param dataPackage the data we package up from the data received
+     * @param data the data we package up from the data received
      * @return Intent
      ***********************************************/
-    public Intent CreateIntentFromDataPackage(OpenICEDataPackage dataPackage){
+    public Intent CreateIntentFromICEData(ice.Numeric data){
         ///The intent to send out to the service
         Intent myIntent = null;
         try
         {
-           if(dataPackage != null) {
-               myIntent = new Intent(ICE_DATA);
+           if(data != null) {
+               myIntent = new Intent(data.metric_id);
                ///create intent with string message with comma separated values
-               myIntent.putExtra(ICE_DATA, dataPackage.DataType + "," + dataPackage.MetricID + "," + dataPackage.MetricValue);
-               myIntent.putExtra("METRIC_VALUE", dataPackage.MetricValue);
+               myIntent.putExtra(METRIC_VALUE, (double)data.value);
            }
         }
         catch(Exception ex){
-            System.out.println("Could not create Intent from data package, message: " + ex.toString());
+            System.out.println("Could not create Intent from ICE data, message: " + ex.toString());
         }
         return myIntent;
     }

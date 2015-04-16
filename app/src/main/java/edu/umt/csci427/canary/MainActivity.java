@@ -115,6 +115,10 @@ public class MainActivity extends ActionBarActivity implements
                 .add(R.id.container, MonitorFragment.newInstance(title, units, 1.2f, metric_id))
                 .commit();
     }
+    @Override
+    public void onDestroy(){
+        stopService(new Intent(this, OpenICEService.class));
+    }
 
 
 }

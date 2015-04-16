@@ -63,6 +63,7 @@ public class OpenICE implements Runnable {
     //Sends out intents
     private LocalBroadcastManager broadcaster;
     private Service parentService;
+    static final public String ICE_DATA = "ICE_DATA";
 
     // intent action to store metric value in an intent
     static final public String METRIC_VALUE = "METRIC_VALUE";
@@ -201,7 +202,7 @@ public class OpenICE implements Runnable {
                                         ///Create the intent from valid data.
                                         this.CreateIntentFromICEData(data)
                                 );
-                               // System.out.println(data);
+                                // System.out.println(data);
                             }
 
                         }
@@ -213,7 +214,7 @@ public class OpenICE implements Runnable {
                         // so the reader can control their lifecycle
                         nReader.return_loan(n_data_seq, info_seq);
                     }
-              }
+                }
             }
         }//END FOR(;;)
     }//END LOAD LIBRARIES
@@ -228,11 +229,11 @@ public class OpenICE implements Runnable {
         Intent myIntent = null;
         try
         {
-           if(data != null) {
-               myIntent = new Intent(data.metric_id);
-               ///create intent with string message with comma separated values
-               myIntent.putExtra(METRIC_VALUE, (double)data.value);
-           }
+            if(data != null) {
+                myIntent = new Intent(data.metric_id);
+                ///create intent with string message with comma separated values
+                myIntent.putExtra(METRIC_VALUE, (double)data.value);
+            }
         }
         catch(Exception ex){
             System.out.println("Could not create Intent from ICE data, message: " + ex.toString());
@@ -258,8 +259,8 @@ public class OpenICE implements Runnable {
     }
 
     /**************************
-    Load the RTI compiled files.
-    **************************/
+     Load the RTI compiled files.
+     **************************/
     private boolean LoadRTILibraries(){
         boolean loaded = false;
         try{

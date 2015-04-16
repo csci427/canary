@@ -22,12 +22,14 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null)
+        {
 
-
+        }
+        else
+        {
             Intent intent = new Intent(this, OpenICEService.class);
             startService(intent);
-
             Intent startServiceIntent = new Intent(this, AlertService.class);
             startService(startServiceIntent);
         }
@@ -77,9 +79,8 @@ public class MainActivity extends ActionBarActivity implements
         onFragmentInteraction();
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri)
-    {}
+    //@Override
+    public void onFragmentInteraction(Uri uri) {}
 
 
     @Override
@@ -119,6 +120,5 @@ public class MainActivity extends ActionBarActivity implements
                 .add(R.id.container, MonitorFragment.newInstance(title, units, 1.2f, metric_id))
                 .commit();
     }
-
 
 }

@@ -15,4 +15,10 @@
         <item>Systolic BP from cuff</item>
     </string-array>
 
+    <string-array name="monitor_names">
+        <item>PulseOxHR</item>
+        <item>ECG</item>
+        <item>PulseOx</item>
+        <item>PulseOx</item>
+    </string-array>
 </resources>

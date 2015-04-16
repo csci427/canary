@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
-    android:layout_height="fill_parent" tools:context="edu.umt.csci427.canary.MonitorFragment">
+    android:layout_height="fill_parent" tools:context="edu.umt.csci427.canary.MonitorFragment"
+    android:clickable="false">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -46,7 +47,8 @@
         android:id="@+id/button"
         android:layout_below="@+id/monitorTitleTextView"
         android:layout_centerHorizontal="true"
-        android:theme="@style/AppTheme"
-        android:visibility="invisible"
-        android:clickable="false" />
+        android:visibility="visible"
+        android:clickable="true"
+        android:longClickable="true"
+        android:text="PUSH" />
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -28,7 +29,7 @@ public class MonitorFragment extends Fragment {
     private static final String ARG_PARAM4 = "metric_id";
 
     private Monitor monitor;
-
+    private Button invisButton;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -94,6 +95,18 @@ public class MonitorFragment extends Fragment {
         valTv.setText(monitor.getTitle());
         valTv = (TextView)getView().findViewById(R.id.monitorUnitsTextView);
         valTv.setText(monitor.getUnits());
+
+
+        invisButton = (Button)getView().findViewById(R.id.button);
+        invisButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction()
+                        .add(R.id.container, ThresholdFragment.newInstance("bogus1", "bogus2"))
+                        .commit();
+            }
+        });
+
     }
 
     @Override

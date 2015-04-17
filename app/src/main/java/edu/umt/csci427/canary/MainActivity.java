@@ -30,8 +30,7 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null)
-        {
+        if (savedInstanceState == null) {
             Intent intent = new Intent(this, OpenICEService.class);
             startService(intent);
 
@@ -39,10 +38,6 @@ public class MainActivity extends ActionBarActivity implements
             startService(startServiceIntent);
 
             ViewManager.attachMainActivity(this);
-        }
-        else
-        {
-
         }
     }
 
@@ -53,10 +48,6 @@ public class MainActivity extends ActionBarActivity implements
         Intent intent = new Intent(this, AlertService.class);
         getApplicationContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
-    //@Override
-    //protected void onActivityCreate(Bundle savedInstanceState)
-    //{
-    //}
 
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -76,7 +67,6 @@ public class MainActivity extends ActionBarActivity implements
             mBound = false;
         }
     };
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -171,10 +161,10 @@ public class MainActivity extends ActionBarActivity implements
         ViewManager.addMonitorToScreen(MonitorFragment.newInstance(title, units, metric_id));
 
     }
+
     @Override
     public void onDestroy(){
         stopService(new Intent(this, OpenICEService.class));
         super.onDestroy();
     }
-
 }

@@ -112,7 +112,6 @@ public class MonitorFragment extends Fragment {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, ThresholdFragment.newInstance("bogus1", "bogus2"))
                     .commit();
-            //getFragmentManager().executePendingTransactions();
         }
     }
 

@@ -3,7 +3,6 @@ package edu.umt.csci427.canary;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.IntentFilter;
@@ -12,9 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +26,7 @@ public class MonitorFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "title";
     private static final String ARG_PARAM2 = "units";
+    private static final String ARG_PARAM3 = "value";
     private static final String ARG_PARAM4 = "metric_id";
 
     private Monitor monitor;
@@ -142,6 +140,7 @@ public class MonitorFragment extends Fragment {
         super.onAttach(activity);
         try {
             mListener = (OnMonitorFragmentInteractionListener) activity;
+            mListener.changeThreshold(200);
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
@@ -166,6 +165,8 @@ public class MonitorFragment extends Fragment {
     public interface OnMonitorFragmentInteractionListener {
         public void onFragmentInteraction();
         public void launchThresholdOnClick();
+
+        public void changeThreshold(double d);
     }
 
 }

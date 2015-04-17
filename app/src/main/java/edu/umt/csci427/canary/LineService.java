@@ -55,17 +55,15 @@ public class LineService extends IntentService {
         Toast.makeText(LineService.this, "Service is stopped", Toast.LENGTH_SHORT).show();
     }
 
-    public void run()
-    {
+    public void run() {
         //Initialize buffer to hold recorded audio data, start recording, and start playback
-        try
-        {
+        try {
             //smaller buffer size = more cpu usage but less latency
             //decrease the buffer size by change the N*x functions where N=smallest allowed buffer
             int N = AudioRecord.getMinBufferSize(8000, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
-            recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT, N*5);//Arbitrarily set to N*10 in most examples
+            recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT, N * 5);//Arbitrarily set to N*10 in most examples
             track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000,
-                    AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT, N*5, AudioTrack.MODE_STREAM);
+                    AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT, N * 5, AudioTrack.MODE_STREAM);
             recorder.startRecording();
             track.play();
             /*
@@ -76,9 +74,7 @@ public class LineService extends IntentService {
                 int n = recorder.read(buffer, 0, buffer.length);
                 track.write(buffer, 0, n);
             }
-        }
-        catch(Throwable x)
-        {
+        } catch (Throwable x) {
             Toast.makeText(LineService.this, "Failed to start", Toast.LENGTH_SHORT).show();
         }
     }

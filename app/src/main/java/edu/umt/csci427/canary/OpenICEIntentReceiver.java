@@ -21,6 +21,10 @@ public class OpenICEIntentReceiver extends BroadcastReceiver {
     private Activity MainActivity; ///Needs main activity to become registered
     private Fragment MonitorFrag;
 
+    public OpenICEIntentReceiver() {
+        throw new UnsupportedOperationException("Do not call empty constructor!");
+    }
+
     public OpenICEIntentReceiver(Activity mainActivity, TextView tv){
         if(mainActivity != null) this.MainActivity = mainActivity;
         if(tv != null) this.dataView = tv;

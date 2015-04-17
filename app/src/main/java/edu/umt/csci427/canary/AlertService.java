@@ -6,7 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.os.Binder;
+import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+
+import rosetta.MDC_PULS_OXIM_PULS_RATE;
 
 /**
  * Created by aaron on 3/24/15.
@@ -15,6 +19,9 @@ public class AlertService extends IntentService {
 
     private AudioManager myAudioManager;
     private AudioManager.OnAudioFocusChangeListener myOnAudioFocusChangeListener;
+    // Binder given to clients
+    private final IBinder mBinder = new LocalBinder();
+    private double threshold = 150;
 
     public AlertService() {super(AlertService.class.getSimpleName());}
 
@@ -24,12 +31,23 @@ public class AlertService extends IntentService {
 
             double value = intent.getDoubleExtra("METRIC_VALUE", -1);
 
-            if (value > 150){
+            if (value > threshold){
                 myAudioManager.requestAudioFocus(myOnAudioFocusChangeListener,
                         AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
             }
         }
     };
+
+    public class LocalBinder extends Binder {
+        AlertService getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return AlertService.this;
+        }
+    }
+
+    public void changeThreshold(double d){
+        threshold = d;
+    }
 
     @Override
     public void onCreate() {
@@ -37,7 +55,7 @@ public class AlertService extends IntentService {
 
         // create intent filter
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(OpenICE.ICE_DATA);
+        intentFilter.addAction(MDC_PULS_OXIM_PULS_RATE.VALUE);
 
         // register receiver
         LocalBroadcastManager.getInstance(getApplication())
@@ -61,5 +79,8 @@ public class AlertService extends IntentService {
     protected void onHandleIntent(Intent intent) {
     }
 
-
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
 }

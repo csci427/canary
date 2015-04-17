@@ -19,7 +19,7 @@ import android.widget.Toast;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MonitorFragment.OnFragmentInteractionListener} interface
+ * {@link MonitorFragment.OnMonitorFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link MonitorFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -29,12 +29,10 @@ public class MonitorFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "title";
     private static final String ARG_PARAM2 = "units";
-    private static final String ARG_PARAM3 = "value";
     private static final String ARG_PARAM4 = "metric_id";
 
     private Monitor monitor;
-    private Button invisButton;
-    private OnFragmentInteractionListener mListener;
+    private OnMonitorFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -42,18 +40,15 @@ public class MonitorFragment extends Fragment {
      *
      * @param title Title which will be displayed in the monitor.
      * @param units Units the value uses, if applicable.
-     * @param value Value of the monitor.
      * @param metric_id Action of broadcasts that we should receive
      * @return A new instance of fragment MonitorFragment.
      */
 
-    public static MonitorFragment newInstance(String title, String units, float value,
-                                              String metric_id) {
+    public static MonitorFragment newInstance(String title, String units, String metric_id) {
         MonitorFragment fragment = new MonitorFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, title);
         args.putString(ARG_PARAM2, units);
-        args.putFloat(ARG_PARAM3, value);
         args.putString(ARG_PARAM4, metric_id);
         fragment.setArguments(args);
 
@@ -71,7 +66,6 @@ public class MonitorFragment extends Fragment {
             monitor = Monitor.newInstance(
                     getArguments().getString(ARG_PARAM1),
                     getArguments().getString(ARG_PARAM2),
-                    getArguments().getFloat(ARG_PARAM3),
                     getArguments().getString(ARG_PARAM4)
             );
         }
@@ -97,48 +91,57 @@ public class MonitorFragment extends Fragment {
         TextView valTv;
         valTv = (TextView)getView().findViewById(R.id.monitorTitleTextView);
         valTv.setText(monitor.getTitle());
+        valTv.setOnClickListener(new monitorButtonShortListener());
+        valTv.setOnLongClickListener(new monitorButtonLongListener());
         valTv = (TextView)getView().findViewById(R.id.monitorUnitsTextView);
         valTv.setText(monitor.getUnits());
+        valTv.setOnClickListener(new monitorButtonShortListener());
+        valTv.setOnLongClickListener(new monitorButtonLongListener());
+        valTv = (TextView)getView().findViewById(R.id.monitorValueTextView);
+        valTv.setOnClickListener(new monitorButtonShortListener());
+        valTv.setOnLongClickListener(new monitorButtonLongListener());
 
-
-        invisButton = (Button)getView().findViewById(R.id.button);
-        invisButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().beginTransaction()
-                        .hide(getFragmentManager().findFragmentByTag(monitor.getTitle()));
-                getFragmentManager().beginTransaction()
-                        .add(R.id.container, ThresholdFragment.newInstance("bogus1", "bogus2"))
-                        .commit();
-                getFragmentManager().executePendingTransactions();
-            }
-        });
-        invisButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                new AlertDialog.Builder(v.getContext())
-                        .setTitle("Remove Fragment")
-                        .setMessage("Do you want to remove monitor?")
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                getFragmentManager().beginTransaction()
-                                        .remove(getFragmentManager().findFragmentByTag(monitor.getTitle()))
-                                        .commit();
-                                getFragmentManager().executePendingTransactions();
-                            }})
-                        .setNegativeButton(android.R.string.no, null).show();
-                return true;
-            }
-        });
 
     }
 
-    @Override
+    private class monitorButtonShortListener implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View V)
+        {
+            getFragmentManager().beginTransaction()
+                    .hide(getFragmentManager().findFragmentByTag(monitor.getTitle()));
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, ThresholdFragment.newInstance("bogus1", "bogus2"))
+                    .commit();
+            getFragmentManager().executePendingTransactions();
+        }
+    }
+
+    private class monitorButtonLongListener implements View.OnLongClickListener
+    {
+        @Override
+        public boolean onLongClick(View v) {
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle("Remove Fragment")
+                    .setMessage("Do you want to remove monitor?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            getFragmentManager().beginTransaction()
+                                    .remove(getFragmentManager().findFragmentByTag(monitor.getTitle()))
+                                    .commit();
+                            getFragmentManager().executePendingTransactions();
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
+            return true;
+        }
+    }
+
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnMonitorFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
@@ -160,7 +163,7 @@ public class MonitorFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnMonitorFragmentInteractionListener {
         public void onFragmentInteraction();
         public void launchThresholdOnClick();
     }

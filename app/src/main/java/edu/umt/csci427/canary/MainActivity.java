@@ -1,7 +1,6 @@
 package edu.umt.csci427.canary;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
@@ -15,7 +14,7 @@ import rosetta.MDC_PULS_OXIM_SAT_O2;
 
 
 public class MainActivity extends ActionBarActivity implements
-        MonitorFragment.OnFragmentInteractionListener,
+        MonitorFragment.OnMonitorFragmentInteractionListener,
         ThresholdFragment.OnFragmentInteractionListener,
         AddMonitorFragment.AddMonitorListener {
 
@@ -28,12 +27,19 @@ public class MainActivity extends ActionBarActivity implements
             startService(intent);
             Intent startServiceIntent = new Intent(this, AlertService.class);
             startService(startServiceIntent);
+
+            ViewManager.attachMainActivity(this);
         }
         else
         {
 
         }
     }
+
+    //@Override
+    //protected void onActivityCreate(Bundle savedInstanceState)
+    //{
+    //}
 
 
     @Override
@@ -68,9 +74,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onFragmentInteraction()
     {
-        getFragmentManager().beginTransaction()
-                .add(R.id.container, ThresholdFragment.newInstance("bogus1", "bogus2"))
-                .commit();
+
     }
 
     @Override
@@ -78,9 +82,6 @@ public class MainActivity extends ActionBarActivity implements
     {
         onFragmentInteraction();
     }
-
-    //@Override
-    public void onFragmentInteraction(Uri uri) {}
 
 
     @Override
@@ -115,10 +116,8 @@ public class MainActivity extends ActionBarActivity implements
                 break;
         }
 
+        ViewManager.addMonitorToScreen(MonitorFragment.newInstance(title, units, metric_id));
 
-        getFragmentManager().beginTransaction()
-                .add(R.id.container, MonitorFragment.newInstance(title, units, 1.2f, metric_id), title)
-                .commit();
     }
 
 }

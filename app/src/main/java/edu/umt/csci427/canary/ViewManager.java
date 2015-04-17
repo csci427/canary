@@ -9,11 +9,10 @@ import java.util.List;
 public class ViewManager
 {
 
-    public static final int MAX_MONITORS = 2;
+    public static final int MAX_MONITORS = 1;
 
     private static List<MonitorFragment> monitors = new ArrayList<>();
     private static int mCOUNT() { return monitors.size(); }
-    public static MonitorFragment getFragmentReference(int id) { return monitors.get(id); }
     private static MainActivity main;
 
     public static void attachMainActivity(MainActivity main) { ViewManager.main = main; }
@@ -56,7 +55,14 @@ public class ViewManager
         return ret;
     }
 
-    private static boolean arrange1() { throw new UnsupportedOperationException(); }
+    private static boolean arrange1()
+    {
+        main.getFragmentManager().beginTransaction()
+                .add(R.id.container, monitors.get(0), monitors.get(0).getTag())
+                .commit();
+        return true;
+    }
+
     private static boolean arrange2() { throw new UnsupportedOperationException(); }
     private static boolean arrange3() { throw new UnsupportedOperationException(); }
     private static boolean arrange4() { throw new UnsupportedOperationException(); }
@@ -65,7 +71,7 @@ public class ViewManager
     {
         if (!monitors.contains(m))
         {
-            throw new IndexOutOfBoundsException("Monitor does not exist.");
+            //throw new IndexOutOfBoundsException("Monitor does not exist.");
         }
         monitors.remove(m);
         arrange();

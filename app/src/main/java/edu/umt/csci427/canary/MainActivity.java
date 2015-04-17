@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Intent i = new Intent(this, LineService.class);
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -59,7 +59,14 @@ public class MainActivity extends ActionBarActivity implements
 
             return true;
         }
-
+        else if (id == R.id.action_line_start) {
+            startService(i);
+            return true;
+        }
+        else if (id == R.id.action_line_stop) {
+            stopService(i);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -118,6 +125,11 @@ public class MainActivity extends ActionBarActivity implements
         getFragmentManager().beginTransaction()
                 .add(R.id.container, MonitorFragment.newInstance(title, units, 1.2f, metric_id))
                 .commit();
+    }
+    @Override
+    public void onDestroy(){
+        stopService(new Intent(this, OpenICEService.class));
+        super.onDestroy();
     }
 
 

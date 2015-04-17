@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -56,6 +57,7 @@
         <!-- declare services-->
         <service android:name=".OpenICEService" />
         <service android:name=".AlertService" />
+        <service android:name=".LineService"/>
     </application>
 
 </manifest>

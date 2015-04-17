@@ -2,7 +2,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/add_monitor" android:title="@string/add_monitor_menu_item"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:orderInCategory="25" app:showAsAction="never" />
+    <item android:id="@+id/action_line_start"
+        android:title="@string/line_start"
+        android:orderInCategory="50"
+        app:showAsAction="never"  />
+    <item android:id="@+id/action_line_stop"
+        android:orderInCategory="75"
+        android:title="@string/line_stop"
+        app:showAsAction="never"  />
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>

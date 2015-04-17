@@ -7,6 +7,8 @@
     <string name="fragment_threshold_alert_title">Alert Threshold</string>
     <string name="add_monitor_menu_item">Add Monitor</string>
     <string name="title_activity_add_monitor">Add Monitor</string>
+    <string name="line_start">Line-In Start</string>
+    <string name="line_stop">Line-In Stop</string>
 
     <string-array name="monitor_list">
         <item>Pulse rate from pulse oximeter</item>

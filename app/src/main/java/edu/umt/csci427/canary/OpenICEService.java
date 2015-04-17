@@ -1,5 +1,6 @@
 package edu.umt.csci427.canary;
 
+import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.os.*;
@@ -22,6 +23,7 @@ public class OpenICEService extends Service {
     private Thread thread = null;
 
     private OpenICE myICE = null;
+
 
     @Override
     public void onCreate(){
@@ -47,6 +49,7 @@ public class OpenICEService extends Service {
         return START_STICKY;
     }
 
+
     /*
     Currently returns null. Used to bind this service to an activity?
      */
@@ -55,7 +58,14 @@ public class OpenICEService extends Service {
         return null;
     }
 
-    public void onDestory(){
+    @Override
+    public void onDestroy(){
+
         super.onDestroy();
+
     }
+
+
+
+
 }

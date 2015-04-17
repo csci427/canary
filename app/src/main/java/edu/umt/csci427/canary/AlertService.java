@@ -9,8 +9,9 @@ import android.media.AudioManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
-import rosetta.MDC_PULS_OXIM_PULS_RATE;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by aaron on 3/24/15.
@@ -21,7 +22,8 @@ public class AlertService extends IntentService {
     private AudioManager.OnAudioFocusChangeListener myOnAudioFocusChangeListener;
     // Binder given to clients
     private final IBinder mBinder = new LocalBinder();
-    private double threshold = 150;
+
+    ConcurrentHashMap<String, double[]> thresholds = new ConcurrentHashMap<>();
 
     public AlertService() {super(AlertService.class.getSimpleName());}
 
@@ -29,9 +31,18 @@ public class AlertService extends IntentService {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            double value = intent.getDoubleExtra("METRIC_VALUE", -1);
+            // get threshold values
+            double[] thresholdValues = thresholds.get(intent.getAction());
 
-            if (value > threshold){
+            double high = thresholdValues[0];
+            double low = thresholdValues[1];
+
+            // get value from intent
+            double value = intent.getDoubleExtra(OpenICE.METRIC_VALUE, -1);
+
+            Log.v("ZZZ", Double.toString(value) + " " + high + " " + low + " " + (value > high || value < low));
+
+            if (value > high || value < low){
                 myAudioManager.requestAudioFocus(myOnAudioFocusChangeListener,
                         AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
             }
@@ -45,21 +56,33 @@ public class AlertService extends IntentService {
         }
     }
 
-    public void changeThreshold(double d){
-        threshold = d;
+    public void changeThreshold(String metric_id, double high, double low){
+
+        double[] value = thresholds.get(metric_id);
+        if (value != null) {
+            throw new RuntimeException("Listener for that intent not registered");
+        }
+
+        thresholds.put(metric_id, new double[]{high,low});
+    }
+
+    public void addListener(String metric_id, double high, double low){
+
+        thresholds.put(metric_id, new double[]{high,low});
+
+        // create intent filter
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(metric_id);
+
+        // register receiver
+        LocalBroadcastManager.getInstance(getApplication())
+                .registerReceiver(receiver, intentFilter);
+
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        // create intent filter
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MDC_PULS_OXIM_PULS_RATE.VALUE);
-
-        // register receiver
-        LocalBroadcastManager.getInstance(getApplication())
-                .registerReceiver(receiver, intentFilter);
 
         // create AudioManager
         myAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);

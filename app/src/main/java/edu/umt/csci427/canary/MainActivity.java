@@ -118,9 +118,10 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void changeThreshold(double d) {
-       mService.changeThreshold(d);
+    public AlertService getAlertService() {
+        return mService;
     }
+
 
     //@Override
     public void onFragmentInteraction(Uri uri) {}

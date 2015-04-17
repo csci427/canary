@@ -31,6 +31,7 @@ public class MonitorFragment extends Fragment {
 
     private Monitor monitor;
     private OnMonitorFragmentInteractionListener mListener;
+    private AlertService mService;
 
     /**
      * Use this factory method to create a new instance of
@@ -67,6 +68,8 @@ public class MonitorFragment extends Fragment {
                     getArguments().getString(ARG_PARAM4)
             );
         }
+
+        mService.addListener(monitor.getMetric_id(),150,50);
     }
 
     @Override
@@ -98,8 +101,6 @@ public class MonitorFragment extends Fragment {
         valTv = (TextView)getView().findViewById(R.id.monitorValueTextView);
         valTv.setOnClickListener(new monitorButtonShortListener());
         valTv.setOnLongClickListener(new monitorButtonLongListener());
-
-
     }
 
     private class monitorButtonShortListener implements View.OnClickListener
@@ -139,7 +140,8 @@ public class MonitorFragment extends Fragment {
         super.onAttach(activity);
         try {
             mListener = (OnMonitorFragmentInteractionListener) activity;
-            mListener.changeThreshold(200);
+
+            mService = mListener.getAlertService();
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
@@ -165,7 +167,7 @@ public class MonitorFragment extends Fragment {
         public void onFragmentInteraction();
         public void launchThresholdOnClick();
 
-        public void changeThreshold(double d);
+        public AlertService getAlertService();
     }
 
 }

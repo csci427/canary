@@ -18,13 +18,7 @@ public class OpenICEIntentReceiver extends BroadcastReceiver {
 
     private String METRIC_ID;
     private TextView dataView;
-    private Activity MainActivity; ///Needs main activity to become registered
     private Fragment MonitorFrag;
-
-    public OpenICEIntentReceiver(Activity mainActivity, TextView tv){
-        if(mainActivity != null) this.MainActivity = mainActivity;
-        if(tv != null) this.dataView = tv;
-    }
 
     public OpenICEIntentReceiver(Fragment monitorFragment, TextView tv){
         if(monitorFragment != null) this.MonitorFrag = monitorFragment;

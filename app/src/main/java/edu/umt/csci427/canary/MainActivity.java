@@ -1,12 +1,15 @@
 package edu.umt.csci427.canary;
 
-
-
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,24 +20,53 @@ import rosetta.MDC_PULS_OXIM_SAT_O2;
 
 
 public class MainActivity extends ActionBarActivity implements
-        MonitorFragment.OnFragmentInteractionListener,
+        MonitorFragment.OnMonitorFragmentInteractionListener,
         ThresholdFragment.OnFragmentInteractionListener,
         AddMonitorFragment.AddMonitorListener {
+
+    AlertService mService;
+    boolean mBound = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-
-
             Intent intent = new Intent(this, OpenICEService.class);
             startService(intent);
 
             Intent startServiceIntent = new Intent(this, AlertService.class);
             startService(startServiceIntent);
+
+            ViewManager.attachMainActivity(this);
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to LocalService
+        Intent intent = new Intent(this, AlertService.class);
+        getApplicationContext().bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            AlertService.LocalBinder binder = (AlertService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            Log.v("ZZZ", "Service bound");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,6 +81,7 @@ public class MainActivity extends ActionBarActivity implements
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        Intent i = new Intent(this, LineService.class);
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
@@ -61,21 +94,37 @@ public class MainActivity extends ActionBarActivity implements
 
             return true;
         }
-
+        else if (id == R.id.action_line_start) {
+            startService(i);
+            return true;
+        }
+        else if (id == R.id.action_line_stop) {
+            stopService(i);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onFragmentInteraction()
     {
-        getFragmentManager().beginTransaction()
-                .add(R.id.container, ThresholdFragment.newInstance("bogus1", "bogus2"))
-                .commit();
+
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri)
-    {}
+    public void launchThresholdOnClick()
+    {
+        onFragmentInteraction();
+    }
+
+    @Override
+    public AlertService getAlertService() {
+        return mService;
+    }
+
+
+    //@Override
+    public void onFragmentInteraction(Uri uri) {}
 
 
     @Override
@@ -110,11 +159,13 @@ public class MainActivity extends ActionBarActivity implements
                 break;
         }
 
+        ViewManager.addMonitorToScreen(MonitorFragment.newInstance(title, units, metric_id));
 
-        getFragmentManager().beginTransaction()
-                .add(R.id.container, MonitorFragment.newInstance(title, units, 1.2f, metric_id))
-                .commit();
     }
 
-
+    @Override
+    public void onDestroy(){
+        stopService(new Intent(this, OpenICEService.class));
+        super.onDestroy();
+    }
 }

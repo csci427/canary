@@ -26,7 +26,7 @@ public class LineService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(LineService.this, "Service is created", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(LineService.this, "Service is created", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -60,9 +60,9 @@ public class LineService extends IntentService {
         try {
             //smaller buffer size = more cpu usage but less latency
             //decrease the buffer size by change the N*x functions where N=smallest allowed buffer
-            int N = AudioRecord.getMinBufferSize(8000, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
-            recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT, N * 5);//Arbitrarily set to N*10 in most examples
-            track = new AudioTrack(AudioManager.STREAM_MUSIC, 8000,
+            int N = AudioRecord.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
+            recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, 44100, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT, N * 5);//Arbitrarily set to N*10 in most examples
+            track = new AudioTrack(AudioManager.STREAM_MUSIC, 44100,
                     AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT, N * 5, AudioTrack.MODE_STREAM);
 
             recorder.startRecording();

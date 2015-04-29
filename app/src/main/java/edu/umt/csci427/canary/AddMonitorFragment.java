@@ -12,10 +12,15 @@ import android.support.v4.app.DialogFragment;
  */
 
 public class AddMonitorFragment extends DialogFragment {
+
+    // Use this instance of the interface to deliver action events
+    AddMonitorListener aml;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
         builder.setTitle(R.string.add_monitor_menu_item)
                 .setItems(R.array.monitor_list, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -25,12 +30,8 @@ public class AddMonitorFragment extends DialogFragment {
         return builder.create();
     }
 
-    // Use this instance of the interface to deliver action events
-    AddMonitorListener aml;
-
-
     public interface AddMonitorListener {
-        public void onMonitorListClick(DialogFragment dialog, int which);
+        public void onMonitorListClick(DialogFragment dialog, int title);
             // The 'which' argument contains the index position
             // of the selected item
     }

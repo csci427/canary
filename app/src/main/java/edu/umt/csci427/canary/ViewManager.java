@@ -1,6 +1,7 @@
 package edu.umt.csci427.canary;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +24,16 @@ public class ViewManager
     {
         if (mCOUNT() + 1 > MAX_MONITORS)
         {
-            throw new UnsupportedOperationException("Cannot add more monitors to screen.");
+            ///show toast saying they cant add more.
+            Toast.makeText(ViewManager.main, "Maximum number of monitors already added. Cannot add more",
+                    Toast.LENGTH_SHORT).show();
+        }
+        else{
+
+            monitors.add(m);
+            ArrangeMonitors(mCOUNT());
         }
 
-        monitors.add(m);
-        ArrangeMonitors(mCOUNT());
 
         return true;
     }
@@ -46,11 +52,12 @@ public class ViewManager
             if(numberOfMonitorsInArray <= MAX_MONITORS){
                 //For each monitor fragment add them to the respective layout.
                 for(int i = numberOfMonitorsInArray - 1; i < mCOUNT(); i++){
+                        main.getFragmentManager().beginTransaction()
+                                .add(R.id.class.getField(layoutToPlaceMonitorIn + i).getInt(0), monitors.get(i), layoutToPlaceMonitorIn + i)//TODO: Debug.
+                                .commit();
+                        success = true;
 
-                    main.getFragmentManager().beginTransaction()
-                            .add(R.id.class.getField(layoutToPlaceMonitorIn + i).getInt(0), monitors.get(i), layoutToPlaceMonitorIn + i)//TODO: Debug.
-                            .commit();
-                    success = true;
+
                 }
             }
             else{
@@ -63,14 +70,16 @@ public class ViewManager
         return success;
     }
 
-    public boolean removeMonitorFromScreen(MonitorFragment m)
+    public static boolean removeMonitorFromScreen(MonitorFragment m)
     {
-        if (!monitors.contains(m))
+        if (monitors.contains(m))
         {
-            //throw new IndexOutOfBoundsException("Monitor does not exist.");
+            monitors.remove(m);
+            ArrangeMonitors(mCOUNT());
         }
-        monitors.remove(m);
-        //arrange();
+        else{
+            Log.d("Canary Media Player", "Error arranging removing monitor || " + m.getTag());
+        }
         return true;
     }
 

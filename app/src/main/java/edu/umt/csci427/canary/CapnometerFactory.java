@@ -7,12 +7,12 @@ import ice.Numeric;
  */
 public class CapnometerFactory extends OpenICEAbstractFactory {
     @Override
-    OpenICEDataPackage PackageOpenICESimulatedData(ice.Numeric data) {
+    Monitor PackageOpenICESimulatedData(String data) {
         return null;
     }
 
     @Override
-    OpenICEDataPackage PackageOpenICERealTimeData(ice.Numeric data) {
+    Monitor PackageOpenICERealTimeData(String data) {
         return null;
     }
 }

@@ -1,18 +1,33 @@
 package edu.umt.csci427.canary;
 
 import ice.Numeric;
+import rosetta.MDC_ECG_HEART_RATE;
 
 /**
  * Created by RYELAPTOP on 4/6/2015.
  */
 public class ElectroCardioGramFactory extends OpenICEAbstractFactory {
+    public static final String factoryName = "ECGFactory";
     @Override
-    OpenICEDataPackage PackageOpenICESimulatedData(Numeric data) {
-        return null;
+    Monitor PackageOpenICESimulatedData(String data) {
+
+        Monitor myData = null;
+        if(data != null && data.equals(MDC_ECG_HEART_RATE.VALUE)){//comment out if you want all values to go through
+            try{
+                myData = Monitor.newInstance(data, "", "");//TODO: true should match a unique device id.
+            }
+            catch(Exception ex){
+                System.out.println("Could not create monitor, message: " + ex.toString());
+            }
+        }
+        else{
+            System.out.println(factoryName + "Data is null or not simulated.");
+        }
+        return myData;
     }
 
     @Override
-    OpenICEDataPackage PackageOpenICERealTimeData(Numeric data) {
+    Monitor PackageOpenICERealTimeData(String data) {
         return null;
     }
 }

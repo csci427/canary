@@ -1,5 +1,4 @@
 package edu.umt.csci427.canary;
-
 import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,17 +10,12 @@ import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Choreographer;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import rosetta.MDC_ECG_HEART_RATE;
-import rosetta.MDC_PRESS_CUFF_SYS;
-import rosetta.MDC_PULS_OXIM_PULS_RATE;
-import rosetta.MDC_PULS_OXIM_SAT_O2;
+import ice.Numeric;
 
 
 public class MainActivity extends ActionBarActivity implements
@@ -31,6 +25,8 @@ public class MainActivity extends ActionBarActivity implements
 
     AlertService mService;
     boolean mBound = false;
+    //Will create the monitors
+    private OpenICEAbstractFactory factory = null;
 
     //List that contains the tags of all the Monitors added,
     //This allows us to remove them all and add them all on resume.
@@ -141,36 +137,12 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onMonitorListClick(DialogFragment dialog, int which) {
 
-        // TODO: These are horrible hard coded magic numbers... fix it... someone... besides me
-
-        String title = "";
-        String units = "";
-        String metric_id = "";
-
-        switch (which){
-            case 0:
-                title = "Pulse rate (ox)";
-                units = "BPM";
-                metric_id = MDC_PULS_OXIM_PULS_RATE.VALUE;
-                break;
-            case 1:
-                title = "Heart (ECG)";
-                units = "BPM";
-                metric_id = MDC_ECG_HEART_RATE.VALUE;
-                break;
-            case 2:
-                title = "SpO2 (ox)";
-                units = "%";
-                metric_id = MDC_PULS_OXIM_SAT_O2.VALUE;
-                break;
-            case 3:
-                title = "Sys BP (cuff)";
-                units = "mmHg";
-                metric_id = MDC_PRESS_CUFF_SYS.VALUE;
-                break;
-        }
-
-        ViewManager.addMonitorToScreen(MonitorFragment.newInstance(title, units, metric_id));
+        //Retreive selection array
+        String[] monitorSelection = getResources().getStringArray(R.array.monitor_list);
+        //Create factory
+        factory = OpenICEAbstractFactory.GetSimulatedFactory(monitorSelection[which]);
+        factory.PackageOpenICESimulatedData()
+        //ViewManager.addMonitorToScreen(MonitorFragment.newInstance(title, units, metric_id));
 
     }
 
@@ -188,7 +160,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onAttachFragment(Fragment fragment){
         //Instantiate the list if it needs to be.
-        if(attachedFragmentsList == null){
+     /*   if(attachedFragmentsList == null){
             attachedFragmentsList = new ArrayList<>();
         }
             //Check to make sure the tag is not null or whitespace.
@@ -196,7 +168,7 @@ public class MainActivity extends ActionBarActivity implements
             //Add this tag to the attachments list so we can find it later and remove it
             //in the on pause, and potentially re add it onResume.
             attachedFragmentsList.add(fragment.getTag());
-        }
+        }*/
         super.onAttachFragment(fragment);
     }
 

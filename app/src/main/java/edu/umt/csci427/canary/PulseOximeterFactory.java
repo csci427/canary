@@ -10,15 +10,15 @@ public class PulseOximeterFactory extends OpenICEAbstractFactory {
 
     public static final String factoryName = "PULSE_OXIMETER_FACTORY";
     @Override
-    OpenICEDataPackage PackageOpenICESimulatedData(ice.Numeric data) {
+    Monitor PackageOpenICESimulatedData(String data) {
 
-        OpenICEDataPackage myData = null;
-        if(data != null && data.metric_id.equals(rosetta.MDC_PULS_OXIM_PULS_RATE.VALUE)){//comment out if you want all values to go through
+        Monitor myData = null;
+        if(data != null && data.equals(rosetta.MDC_PULS_OXIM_PULS_RATE.VALUE)){//comment out if you want all values to go through
             try{
-                myData = new OpenICEDataPackage(data.metric_id, data.value, true);//TODO: true should match a unique device id.
+                myData = Monitor.newInstance(data, "", "");//TODO: true should match a unique device id.
             }
             catch(Exception ex){
-                System.out.println("Could not create OpenICEDataPackage, message: " + ex.toString());
+                System.out.println("Could not create Monitor, message: " + ex.toString());
             }
         }
         else{
@@ -28,18 +28,18 @@ public class PulseOximeterFactory extends OpenICEAbstractFactory {
     }
 
     @Override
-    OpenICEDataPackage PackageOpenICERealTimeData(ice.Numeric data) {
-        OpenICEDataPackage myData = null;
-        if(data != null && data.metric_id.equals(rosetta.MDC_PULS_OXIM_PULS_RATE.VALUE)){//TODO: May need to be something else
+    Monitor PackageOpenICERealTimeData(String data) {
+        Monitor myData = null;
+        if(data != null && data.equals(rosetta.MDC_PULS_OXIM_PULS_RATE.VALUE)){//comment out if you want all values to go through
             try{
-                myData = new OpenICEDataPackage(data.metric_id, data.value, true);//TODO: true should match a unique device id.
+                myData = Monitor.newInstance(data, "", "");//TODO: true should match a unique device id.
             }
             catch(Exception ex){
-                System.out.println("Could not create OpenICEDataPackage, message: " + ex.toString());
+                System.out.println("Could not create Monitor, message: " + ex.toString());
             }
         }
         else{
-            System.out.println(factoryName + "Data is null or not real time.");
+            System.out.println(factoryName + "Data is null or not simulated.");
         }
         return myData;
     }

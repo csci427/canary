@@ -24,7 +24,7 @@ import android.widget.TextView;
 public class MonitorFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "title";
+    public static final String ARG_PARAM1 = "title";
     private static final String ARG_PARAM2 = "units";
     private static final String ARG_PARAM3 = "value";
     private static final String ARG_PARAM4 = "metric_id";
@@ -154,6 +154,14 @@ public class MonitorFragment extends Fragment {
     }
 
     /**
+     * Override needed to fix crash when rotating screen
+     **/
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+    }
+
+    /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -168,6 +176,11 @@ public class MonitorFragment extends Fragment {
         public void launchThresholdOnClick();
 
         public AlertService getAlertService();
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
     }
 
 }

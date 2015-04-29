@@ -58,7 +58,7 @@ public class ViewManager
     private static boolean arrange1()
     {
         main.getFragmentManager().beginTransaction()
-                .add(R.id.container, monitors.get(0), monitors.get(0).getTag())
+                .add(R.id.container, monitors.get(0), monitors.get(0).ARG_PARAM1)//TODO: change log param to be not ARG_PARAM1
                 .commit();
         return true;
     }

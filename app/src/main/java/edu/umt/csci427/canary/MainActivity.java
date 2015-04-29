@@ -1,5 +1,6 @@
 package edu.umt.csci427.canary;
 
+import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +11,12 @@ import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Choreographer;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import rosetta.MDC_ECG_HEART_RATE;
 import rosetta.MDC_PRESS_CUFF_SYS;
@@ -26,6 +31,11 @@ public class MainActivity extends ActionBarActivity implements
 
     AlertService mService;
     boolean mBound = false;
+
+    //List that contains the tags of all the Monitors added,
+    //This allows us to remove them all and add them all on resume.
+    private List<String> attachedFragmentsList = null;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,4 +178,51 @@ public class MainActivity extends ActionBarActivity implements
         stopService(new Intent(this, OpenICEService.class));
         super.onDestroy();
     }
+
+    /*****************************************
+     * When a fragment is attached to the activity
+     * add its tag to the list this allows us to
+     * remove it later if necessary
+     ****************************************/
+    @Override
+    public void onAttachFragment(Fragment fragment){
+        //Instantiate the list if it needs to be.
+        if(attachedFragmentsList == null){
+            attachedFragmentsList = new ArrayList<>();
+        }
+            //Check to make sure the tag is not null or whitespace.
+        if(fragment != null && !fragment.getTag().isEmpty() && fragment.getTag() != null){
+            //Add this tag to the attachments list so we can find it later and remove it
+            //in the on pause, and potentially re add it onResume.
+            attachedFragmentsList.add(fragment.getTag());
+        }
+        super.onAttachFragment(fragment);
+    }
+
+    /********************************************
+    Removes all of the fragments from the activity
+    when the onPause is called in the life cycle
+    Allows the screen to rotate without errors.
+     ********************************************/
+    @Override
+    public void onPause(){
+        try{
+            //If the fragment list isn't null proceed in removing them all.
+            if(attachedFragmentsList != null){
+                for(String fragTag : attachedFragmentsList){
+                    //Find the fragment by tag
+                    Fragment frag = this.getFragmentManager().findFragmentByTag(fragTag);
+                    //Remove the fragment from the activity.
+                    this.getFragmentManager().beginTransaction().remove(frag).commit();
+                }//END FOR
+            }//END IF
+        }
+        catch(Exception e){
+            //Log to verbose.
+            Log.v("Canary Media Player", "Error removing all fragments from main activity || " + e.toString());
+        }//END TRY CATCH
+        super.onPause();
+    }
+
+
 }

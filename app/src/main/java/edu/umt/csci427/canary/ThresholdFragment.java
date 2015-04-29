@@ -96,4 +96,9 @@ public class ThresholdFragment extends Fragment {
     public interface OnFragmentInteractionListener {
     }
 
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+    }
+
 }

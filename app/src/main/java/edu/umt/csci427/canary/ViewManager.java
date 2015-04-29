@@ -1,5 +1,7 @@
 package edu.umt.csci427.canary;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,7 @@ import java.util.List;
 public class ViewManager
 {
 
-    public static final int MAX_MONITORS = 1;
+    public static final int MAX_MONITORS = 4;
 
     private static List<MonitorFragment> monitors = new ArrayList<>();
     private static int mCOUNT() { return monitors.size(); }
@@ -25,47 +27,74 @@ public class ViewManager
         }
 
         monitors.add(m);
-        arrange();
+        ArrangeMonitors(mCOUNT());
 
         return true;
     }
 
+    /**
+     * Arrange all of the monitors. We will only support 4 due to screen constraints.
+     *
+     * @returns false if a failure
+     */
     private static boolean arrange()
     {
-        boolean ret = true;
-        switch(mCOUNT())
+        boolean result;
+        int numOfMonitors = mCOUNT();
+
+        ///Arrange all of the monitors. we can blow all of this out.
+        switch(numOfMonitors)
         {
             case(1):
-                arrange1();
+                result = ArrangeMonitors(numOfMonitors);
                 break;
             case(2):
-                arrange2();
+                result = ArrangeMonitors(numOfMonitors);
                 break;
             case(3):
-                arrange3();
+                result = ArrangeMonitors(numOfMonitors);
                 break;
             case(4):
-                arrange4();
+                result = ArrangeMonitors(numOfMonitors);
                 break;
             default:
-                ret = false;
+                result = false;
                 break;
 
         }
-        return ret;
+        return result;
     }
 
-    private static boolean arrange1()
-    {
-        main.getFragmentManager().beginTransaction()
-                .add(R.id.container, monitors.get(0), monitors.get(0).ARG_PARAM1)//TODO: change log param to be not ARG_PARAM1
-                .commit();
-        return true;
-    }
+    /**
+     * Arrange all of the monitors. We will only support 4 due to screen constraints.
+     * @param numberOfMonitorsInArray
+     * @return
+     */
+    private static boolean ArrangeMonitors(int numberOfMonitorsInArray) {
+        boolean success = false;
+        String layoutToPlaceMonitorIn = "monitor_container_";
+        try{
+            //If the number of monitors matches at this point we want to add the entire array
+            //If not we don't want to cause exceptions.
+            if(numberOfMonitorsInArray <= MAX_MONITORS){
+                //For each monitor fragment add them to the respective layout.
+                for(int i = numberOfMonitorsInArray - 1; i < mCOUNT(); i++){
 
-    private static boolean arrange2() { throw new UnsupportedOperationException(); }
-    private static boolean arrange3() { throw new UnsupportedOperationException(); }
-    private static boolean arrange4() { throw new UnsupportedOperationException(); }
+                    main.getFragmentManager().beginTransaction()
+                            .add(R.id.class.getField(layoutToPlaceMonitorIn + i).getInt(0), monitors.get(i), layoutToPlaceMonitorIn + i)//TODO: Debug.
+                            .commit();
+                    success = true;
+                }
+            }
+            else{
+                Log.d("Canary Media Player", "Error arranging " + numberOfMonitorsInArray + " monitors.");
+            }
+        }
+        catch(Exception ex){
+            Log.d("Canary Media Player", "Error arranging monitors || " + ex.toString());
+        }
+        return success;
+    }
 
     public boolean removeMonitorFromScreen(MonitorFragment m)
     {

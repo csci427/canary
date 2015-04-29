@@ -11,10 +11,10 @@
     <string name="line_stop">Line-In Stop</string>
 
     <string-array name="monitor_list">
-        <item>Pulse rate from pulse oximeter</item>
-        <item>Heart rate from ECG</item>
-        <item>SpO2 from pulse oximeter</item>
-        <item>Systolic BP from cuff</item>
+        <item>Pulse Rate (PulseOX)</item>
+        <item>Heart Rate (ECG)</item>
+        <item>SpO2 (PulseOX)</item>
+        <item>Systolic BP (CUFF)</item>
     </string-array>
 
     <string-array name="monitor_names">

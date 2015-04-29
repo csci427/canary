@@ -140,9 +140,12 @@ public class MainActivity extends ActionBarActivity implements
         //Retreive selection array
         String[] monitorSelection = getResources().getStringArray(R.array.monitor_list);
         //Create factory
+        //TODO: switch to just normal factory
         factory = OpenICEAbstractFactory.GetSimulatedFactory(monitorSelection[which]);
-        factory.PackageOpenICESimulatedData()
-        //ViewManager.addMonitorToScreen(MonitorFragment.newInstance(title, units, metric_id));
+        //Create monitor object
+        Monitor myMonitor = factory.PackageOpenICESimulatedData(monitorSelection[which]);
+        //Add to View Manager.
+        ViewManager.addMonitorToScreen(MonitorFragment.newInstance(myMonitor));
 
     }
 

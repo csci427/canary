@@ -14,9 +14,9 @@ public class NoninvasiveBloodPressureFactory extends OpenICEAbstractFactory{
     Monitor PackageOpenICESimulatedData(String data) {
 
         Monitor myData = null;
-        if(data != null && data.equals(MDC_PRESS_CUFF_SYS.VALUE)){//comment out if you want all values to go through
+        if(data != null && data.equals("Systolic BP (CUFF)")){//comment out if you want all values to go through
             try{
-                myData = Monitor.newInstance(data, "", "");//TODO: true should match a unique device id.
+                myData = Monitor.newInstance(MDC_PRESS_CUFF_SYS.VALUE, "mmHg", data);//TODO: true should match a unique device id.
             }
             catch(Exception ex){
                 System.out.println("Could not create Monitor, message: " + ex.toString());

@@ -31,7 +31,7 @@ public class AddMonitorFragment extends DialogFragment {
     }
 
     public interface AddMonitorListener {
-        public void onMonitorListClick(DialogFragment dialog, int title);
+        public void onMonitorListClick(DialogFragment dialog, int which);
             // The 'which' argument contains the index position
             // of the selected item
     }

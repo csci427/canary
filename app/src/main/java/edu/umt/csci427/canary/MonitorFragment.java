@@ -29,7 +29,7 @@ public class MonitorFragment extends Fragment {
     private static final String ARG_PARAM3 = "value";
     private static final String ARG_PARAM4 = "metric_id";
 
-    private Monitor monitor;
+    private static Monitor monitor;
     private OnMonitorFragmentInteractionListener mListener;
     private AlertService mService;
 
@@ -54,6 +54,18 @@ public class MonitorFragment extends Fragment {
         return fragment;
     }
 
+    public static MonitorFragment newInstance(Monitor factMonitor) {
+        MonitorFragment fragment = new MonitorFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, factMonitor.getTitle());
+        args.putString(ARG_PARAM2, factMonitor.getUnits());
+        args.putString(ARG_PARAM4, factMonitor.getMetric_id());
+        fragment.setArguments(args);
+        monitor = factMonitor;
+
+        return fragment;
+    }
+
     public MonitorFragment() {
         // Required empty public constructor
     }
@@ -64,12 +76,6 @@ public class MonitorFragment extends Fragment {
         if (getArguments() != null) {
             // Retain this fragment across configuration changes.
             setRetainInstance(true);
-
-            monitor = Monitor.newInstance(
-                    getArguments().getString(ARG_PARAM1),
-                    getArguments().getString(ARG_PARAM2),
-                    getArguments().getString(ARG_PARAM4)
-            );
             mService.addListener(monitor.getMetric_id(),150,50);
         }
 

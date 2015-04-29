@@ -7,12 +7,12 @@ import ice.Numeric;
  */
 public class TempuratureProbeFactory extends OpenICEAbstractFactory {
     @Override
-    OpenICEDataPackage PackageOpenICESimulatedData(Numeric data) {
+    Monitor PackageOpenICESimulatedData(String data) {
         return null;
     }
 
     @Override
-    OpenICEDataPackage PackageOpenICERealTimeData(Numeric data) {
+    Monitor PackageOpenICERealTimeData(String data) {
         return null;
     }
 }

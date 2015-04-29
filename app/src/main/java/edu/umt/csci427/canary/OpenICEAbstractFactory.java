@@ -24,23 +24,23 @@ public abstract class OpenICEAbstractFactory {
         if(factoryType != null && !factoryType.isEmpty()){
             switch(factoryType){
                 //PULSE OX PULSE RATE
-                case MDC_PULS_OXIM_PULS_RATE.VALUE:
+                case "Pulse Rate (PulseOX)":
                     if(pulseOximeterFactory == null) {
                         pulseOximeterFactory = new PulseOximeterFactory();
                     }
                     return pulseOximeterFactory;
-                case MDC_PULS_OXIM_SAT_O2.VALUE:
+                case "SpO2 (PulseOX)":
                     if(pulseOximeterFactory == null) {
                         pulseOximeterFactory = new PulseOximeterFactory();
                     }
                     return pulseOximeterFactory;
 
-                case MDC_ECG_HEART_RATE.VALUE:
+                case "Heart Rate (ECG)":
                     if(ECGFactory == null) {
                         ECGFactory = new ElectroCardioGramFactory();
                     }
                     return ECGFactory;
-                case MDC_PRESS_CUFF_SYS.VALUE:
+                case "Systolic BP (CUFF)":
                     if(BPFactory == null) {
                         BPFactory = new NoninvasiveBloodPressureFactory();
                     }

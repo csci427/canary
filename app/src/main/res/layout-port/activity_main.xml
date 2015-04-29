@@ -6,13 +6,14 @@
     tools:context=".MainActivity" tools:ignore="MergeRootFrame"
     android:background="@android:color/holo_blue_dark"
     android:screenOrientation="portrait"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_weight="1">
 
     <!--Linear Layout for first Monitor-->
     <LinearLayout
         android:id="@+id/monitor_container_0"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
         android:layout_weight=".25">
 
@@ -21,7 +22,7 @@
     <LinearLayout
         android:id="@+id/monitor_container_1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
         android:layout_weight=".25">
 
@@ -30,7 +31,7 @@
     <LinearLayout
         android:id="@+id/monitor_container_2"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
         android:layout_weight=".25">
 
@@ -39,7 +40,7 @@
     <LinearLayout
         android:id="@+id/monitor_container_3"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:orientation="vertical"
         android:layout_weight=".25">
 

@@ -1,23 +1,19 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
     android:layout_height="match_parent" tools:context="edu.umt.csci427.canary.MonitorFragment"
     android:clickable="false"
     android:screenOrientation="portrait"
-    android:layout_weight=".25">
+    android:rowCount="6"
+    android:columnCount="1">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <GridLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:rowCount="6"
-        android:columnCount="1">
-
         <Space
             android:layout_width="20px"
-            android:layout_height="100dp"
+            android:layout_height="20px"
             android:layout_row="0"
-            android:layout_column="0" />
+            android:layout_column="0"
+            android:layout_rowWeight=".10"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,14 +21,15 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="TITLE"
             android:id="@+id/monitorTitleTextView"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:clickable="true"
             android:longClickable="true"
             android:layout_above="@+id/monitorUnitsTextView"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_row="1"
-            android:layout_column="0" />
+            android:layout_column="0"
+            android:layout_rowWeight=".20"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +39,7 @@
             android:id="@+id/monitorValueTextView"
             android:layout_gravity="center"
             android:clickable="true"
-            android:textSize="50dp"
+            android:textSize="40dp"
             android:textAlignment="center"
             android:gravity="center"
             android:longClickable="true"
@@ -50,7 +47,8 @@
             android:layout_alignRight="@+id/monitorUnitsTextView"
             android:layout_alignEnd="@+id/monitorUnitsTextView"
             android:layout_row="2"
-            android:layout_column="0" />
+            android:layout_column="0"
+            android:layout_rowWeight=".40"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -58,21 +56,20 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="UNITS"
             android:id="@+id/monitorUnitsTextView"
-            android:textSize="35dp"
+            android:textSize="25dp"
             android:longClickable="true"
             android:clickable="true"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_row="3"
-            android:layout_column="0" />
+            android:layout_column="0"
+            android:layout_rowWeight=".20"/>
 
         <Space
             android:layout_width="20px"
             android:layout_height="20px"
             android:layout_row="5"
-            android:layout_column="0" />
+            android:layout_column="0"
+            android:layout_rowWeight=".10"/>
 
     </GridLayout>
 
-</LinearLayout>

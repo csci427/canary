@@ -34,39 +34,6 @@ public class ViewManager
 
     /**
      * Arrange all of the monitors. We will only support 4 due to screen constraints.
-     *
-     * @returns false if a failure
-     */
-    private static boolean arrange()
-    {
-        boolean result;
-        int numOfMonitors = mCOUNT();
-
-        ///Arrange all of the monitors. we can blow all of this out.
-        switch(numOfMonitors)
-        {
-            case(1):
-                result = ArrangeMonitors(numOfMonitors);
-                break;
-            case(2):
-                result = ArrangeMonitors(numOfMonitors);
-                break;
-            case(3):
-                result = ArrangeMonitors(numOfMonitors);
-                break;
-            case(4):
-                result = ArrangeMonitors(numOfMonitors);
-                break;
-            default:
-                result = false;
-                break;
-
-        }
-        return result;
-    }
-
-    /**
-     * Arrange all of the monitors. We will only support 4 due to screen constraints.
      * @param numberOfMonitorsInArray
      * @return
      */
@@ -103,7 +70,7 @@ public class ViewManager
             //throw new IndexOutOfBoundsException("Monitor does not exist.");
         }
         monitors.remove(m);
-        arrange();
+        //arrange();
         return true;
     }
 

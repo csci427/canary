@@ -49,10 +49,6 @@ public class OpenICEService extends Service {
         return START_STICKY;
     }
 
-
-    /*
-    Currently returns null. Used to bind this service to an activity?
-     */
     @Override
     public IBinder onBind(Intent intent){
         return null;

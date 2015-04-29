@@ -49,6 +49,7 @@ public class MainActivity extends ActionBarActivity implements
 
             ViewManager.attachMainActivity(this);
         }
+
     }
 
     @Override
@@ -206,7 +207,7 @@ public class MainActivity extends ActionBarActivity implements
      ********************************************/
     @Override
     public void onPause(){
-        try{
+    /*    try{
             //If the fragment list isn't null proceed in removing them all.
             if(attachedFragmentsList != null){
                 for(String fragTag : attachedFragmentsList){
@@ -219,9 +220,30 @@ public class MainActivity extends ActionBarActivity implements
         }
         catch(Exception e){
             //Log to verbose.
-            Log.v("Canary Media Player", "Error removing all fragments from main activity || " + e.toString());
-        }//END TRY CATCH
+            Log.v("Canary Media Player", "Error removing all fragments from main activity on rotate || " + e.toString());
+        }//END TRY CATCH */
         super.onPause();
+
+    }
+
+    @Override
+    public void onResume(){
+        try{
+            //If the fragment list isn't null proceed in removing them all.
+            if(attachedFragmentsList != null){
+                for(String fragTag : attachedFragmentsList){
+                    //Find the fragment by tag
+                    Fragment frag = this.getFragmentManager().findFragmentByTag(fragTag);
+                    //Remove the fragment from the activity.
+                    this.getFragmentManager().beginTransaction().add(frag, frag.getTag()).commit();
+                }//END FOR
+            }//END IF
+        }
+        catch(Exception e){
+            //Log to verbose.
+            Log.v("Canary Media Player", "Error adding all fragments from main activity on rotate || " + e.toString());
+        }//END TRY CATCH
+        super.onResume();
     }
 
 

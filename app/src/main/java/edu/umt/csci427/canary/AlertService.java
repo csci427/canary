@@ -106,4 +106,11 @@ public class AlertService extends IntentService {
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId){
+        ///Returning START_STICKY keeps this service alive if it
+        ///somehow shuts down.
+        return START_STICKY;
+    }
 }

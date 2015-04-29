@@ -61,15 +61,19 @@ public class MonitorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Retain this fragment across configuration changes.
+        setRetainInstance(true);
         if (getArguments() != null) {
+
             monitor = Monitor.newInstance(
                     getArguments().getString(ARG_PARAM1),
                     getArguments().getString(ARG_PARAM2),
                     getArguments().getString(ARG_PARAM4)
             );
+            mService.addListener(monitor.getMetric_id(),150,50);
         }
 
-        mService.addListener(monitor.getMetric_id(),150,50);
+
     }
 
     @Override
@@ -101,6 +105,8 @@ public class MonitorFragment extends Fragment {
         valTv = (TextView)getView().findViewById(R.id.monitorValueTextView);
         valTv.setOnClickListener(new monitorButtonShortListener());
         valTv.setOnLongClickListener(new monitorButtonLongListener());
+
+
     }
 
     private class monitorButtonShortListener implements View.OnClickListener
@@ -140,7 +146,6 @@ public class MonitorFragment extends Fragment {
         super.onAttach(activity);
         try {
             mListener = (OnMonitorFragmentInteractionListener) activity;
-
             mService = mListener.getAlertService();
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");

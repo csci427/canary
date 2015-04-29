@@ -205,7 +205,7 @@ public class MainActivity extends ActionBarActivity implements
     when the onPause is called in the life cycle
     Allows the screen to rotate without errors.
      ********************************************/
-    @Override
+   /* @Override
     public void onPause(){
     /*    try{
             //If the fragment list isn't null proceed in removing them all.
@@ -221,12 +221,12 @@ public class MainActivity extends ActionBarActivity implements
         catch(Exception e){
             //Log to verbose.
             Log.v("Canary Media Player", "Error removing all fragments from main activity on rotate || " + e.toString());
-        }//END TRY CATCH */
+        }//END TRY CATCH 
         super.onPause();
 
-    }
+    }*/
 
-    @Override
+   /* @Override
     public void onResume(){
         try{
             //If the fragment list isn't null proceed in removing them all.
@@ -244,7 +244,7 @@ public class MainActivity extends ActionBarActivity implements
             Log.v("Canary Media Player", "Error adding all fragments from main activity on rotate || " + e.toString());
         }//END TRY CATCH
         super.onResume();
-    }
+    }*/
 
 
 }

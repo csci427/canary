@@ -62,6 +62,8 @@ public class MonitorFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            // Retain this fragment across configuration changes.
+            setRetainInstance(true);
 
             monitor = Monitor.newInstance(
                     getArguments().getString(ARG_PARAM1),

@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     tools:context=".MainActivity" tools:ignore="MergeRootFrame"
     android:background="@android:color/holo_blue_dark"
-    android:screenOrientation="landscape"
+    android:screenOrientation="portrait"
     android:orientation="horizontal"
     android:layout_weight="1">
 

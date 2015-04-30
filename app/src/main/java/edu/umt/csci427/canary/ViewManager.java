@@ -51,11 +51,20 @@ public class ViewManager
             //If not we don't want to cause exceptions.
             if(numberOfMonitorsInArray <= MAX_MONITORS){
                 //For each monitor fragment add them to the respective layout.
-                for(int i = numberOfMonitorsInArray - 1; i < mCOUNT(); i++){
+                for(int i = numberOfMonitorsInArray -1; i < mCOUNT(); i++){
+                    if(main.getFragmentManager().findFragmentByTag(layoutToPlaceMonitorIn + i) == null){
                         main.getFragmentManager().beginTransaction()
-                                .add(R.id.class.getField(layoutToPlaceMonitorIn + i).getInt(0), monitors.get(i), layoutToPlaceMonitorIn + i)//TODO: Debug.
+                                .add(R.id.class.getField(layoutToPlaceMonitorIn + i).getInt(0), monitors.get(i), layoutToPlaceMonitorIn + i)
                                 .commit();
                         success = true;
+                    }
+                    else{
+                        main.getFragmentManager().beginTransaction()
+                                .replace(R.id.class.getField(layoutToPlaceMonitorIn + i).getInt(0), monitors.get(i))
+                                .commit();
+                        success = true;
+                    }
+
 
 
                 }

@@ -3,7 +3,7 @@
     android:layout_height="match_parent" tools:context="edu.umt.csci427.canary.MonitorFragment"
     android:layout_gravity="center_vertical"
     android:clickable="false"
-    android:screenOrientation="landscape"
+    android:screenOrientation="portrait"
     android:rowCount="6"
     android:columnCount="1">
 

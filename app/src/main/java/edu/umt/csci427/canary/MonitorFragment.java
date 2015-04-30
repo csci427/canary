@@ -111,8 +111,6 @@ public class MonitorFragment extends Fragment {
         valTv = (TextView)getView().findViewById(R.id.monitorValueTextView);
         valTv.setOnClickListener(new monitorButtonShortListener());
         valTv.setOnLongClickListener(new monitorButtonLongListener());
-
-
     }
 
     private class monitorButtonShortListener implements View.OnClickListener

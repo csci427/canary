@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -14,10 +15,9 @@ import android.util.Log;
 import android.view.Choreographer;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import android.widget.Toast;
 import rosetta.MDC_ECG_HEART_RATE;
 import rosetta.MDC_PRESS_CUFF_SYS;
 import rosetta.MDC_PULS_OXIM_PULS_RATE;
@@ -93,11 +93,12 @@ public class MainActivity extends ActionBarActivity implements
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Intent i = new Intent(this, LineService.class);
+        AudioManager am= (AudioManager) getBaseContext().getSystemService(Context.AUDIO_SERVICE);
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }
+            }
         else if (id == R.id.add_monitor)
         {
             DialogFragment addMonitorFrag = new AddMonitorFragment();
@@ -106,7 +107,14 @@ public class MainActivity extends ActionBarActivity implements
             return true;
         }
         else if (id == R.id.action_line_start) {
-            startService(i);
+            //check for a connected headset/adapter
+            Boolean tStat = am.isWiredHeadsetOn();
+            if (tStat == true){
+                startService(i);
+            }
+            else{
+                Toast.makeText(getBaseContext(), "Error: Connect Adapter!", Toast.LENGTH_LONG).show();
+            }
             return true;
         }
         else if (id == R.id.action_line_stop) {

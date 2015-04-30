@@ -97,7 +97,7 @@ public class MonitorFragment extends Fragment {
                 (TextView)getView().findViewById(R.id.monitorValueTextView));
 
         LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(receiver,
-                new IntentFilter(monitor.getMetric_id()));
+                new IntentFilter(monitor.getTitle()));
 
         TextView valTv;
         valTv = (TextView)getView().findViewById(R.id.monitorTitleTextView);

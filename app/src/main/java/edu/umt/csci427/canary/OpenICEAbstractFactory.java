@@ -13,6 +13,10 @@ public abstract class OpenICEAbstractFactory {
     private static PulseOximeterFactory pulseOximeterFactory = null;
     private static ElectroCardioGramFactory ECGFactory = null;
     private static NoninvasiveBloodPressureFactory BPFactory = null;
+    private static CapnometerFactory capnometerFactory = null;
+    private static MultiparameterMonitorFactory multiParameterMonitorFactory = null;
+    private static TempuratureProbeFactory tempProbeFactory = null;
+    private static InfusionPumpFactory infusionPumpFactory = null;
 
     ///Creates data package for Adapter pattern for simulated data
     abstract Monitor PackageOpenICESimulatedData(String data);
@@ -20,6 +24,7 @@ public abstract class OpenICEAbstractFactory {
     ///Creates data package for Adapter pattern for real time data
     abstract Monitor PackageOpenICERealTimeData(String data);
 
+    //TODO: add each type value
     public static OpenICEAbstractFactory GetSimulatedFactory(String factoryType){
         if(factoryType != null && !factoryType.isEmpty()){
             switch(factoryType){
@@ -34,7 +39,6 @@ public abstract class OpenICEAbstractFactory {
                         pulseOximeterFactory = new PulseOximeterFactory();
                     }
                     return pulseOximeterFactory;
-
                 case "Heart Rate (ECG)":
                     if(ECGFactory == null) {
                         ECGFactory = new ElectroCardioGramFactory();
@@ -45,8 +49,26 @@ public abstract class OpenICEAbstractFactory {
                         BPFactory = new NoninvasiveBloodPressureFactory();
                     }
                     return BPFactory;
-
-
+                case "Simulated Capnometer":
+                    if(capnometerFactory == null) {
+                        capnometerFactory = new CapnometerFactory();
+                    }
+                    return capnometerFactory;
+                case "Simulated Infusion Pump":
+                    if(infusionPumpFactory == null) {
+                        infusionPumpFactory = new InfusionPumpFactory();
+                    }
+                    return infusionPumpFactory;
+                case "Simulated Multiparameter Monitor":
+                    if(multiParameterMonitorFactory == null) {
+                        multiParameterMonitorFactory = new MultiparameterMonitorFactory();
+                    }
+                    return multiParameterMonitorFactory;
+                case "Simulated Temp Probe":
+                    if(tempProbeFactory == null) {
+                        tempProbeFactory = new TempuratureProbeFactory();
+                    }
+                    return tempProbeFactory;
                 default:
                     return null;
                 }
@@ -56,22 +78,6 @@ public abstract class OpenICEAbstractFactory {
         }
     }
 
-    public OpenICEAbstractFactory GetRealTimeDataFactory(String factoryType){
-        if(factoryType != null){
-            switch(factoryType){
-                case "PULSE_OX":
-                    if(pulseOximeterFactory == null) {//TODO: turn into real device
-                        pulseOximeterFactory = new PulseOximeterFactory();
-                    }
-                    return pulseOximeterFactory;
-                default:
-                    return null;
-            }
-        }
-        else{
-            return null;
-        }
-    }
 
     ///Default constructor.
     public OpenICEAbstractFactory(){};

@@ -9,18 +9,13 @@ import rosetta.MDC_PRESS_CUFF_SYS;
  */
 public class NoninvasiveBloodPressureFactory extends OpenICEAbstractFactory{
 
-    public static final String factoryName = "BPFactory";
+    public static final String factoryName = "NoninvasiveBloodPressureFactory";
     @Override
     Monitor PackageOpenICESimulatedData(String data) {
 
         Monitor myData = null;
-        if(data != null && data.equals("Systolic BP (CUFF)")){//comment out if you want all values to go through
-            try{
-                myData = Monitor.newInstance(MDC_PRESS_CUFF_SYS.VALUE, "mmHg", data);//TODO: true should match a unique device id.
-            }
-            catch(Exception ex){
-                System.out.println("Could not create Monitor, message: " + ex.toString());
-            }
+        if(data != null && data.equals("Simulated Noninvasive BP")){//comment out if you want all values to go through
+           myData = Monitor.newInstance(MDC_PRESS_CUFF_SYS.VALUE, "mmHg", data);//TODO: true should match a unique device id.
         }
         else{
             System.out.println(factoryName + "Data is null or not simulated.");

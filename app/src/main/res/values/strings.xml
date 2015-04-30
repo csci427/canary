@@ -15,6 +15,12 @@
         <item>Heart Rate (ECG)</item>
         <item>SpO2 (PulseOX)</item>
         <item>Systolic BP (CUFF)</item>
+        <item>Simulated Capnometer</item>
+        <item>Simulated Infusion Pump</item>
+        <item>Simulated Multiparameter Monitor</item>
+        <item>Simulated Noninvasive BP</item>
+        <item>Simulated Pulse Oximeter</item>
+        <item>Simulated Temp Probe</item>
     </string-array>
 
     <string-array name="monitor_names">

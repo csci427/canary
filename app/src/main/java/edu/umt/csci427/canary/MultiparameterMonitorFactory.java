@@ -6,7 +6,7 @@ import ice.Numeric;
  * Created by RYELAPTOP on 4/6/2015.
  */
 public class MultiparameterMonitorFactory extends OpenICEAbstractFactory {
-
+    //MultiParameter monitor has pulse ox ECG and Capnometer all in one.
     public static final String factoryName = "MultiparameterMonitorFactory";
 
     @Override

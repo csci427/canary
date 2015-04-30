@@ -10,15 +10,10 @@ import rosetta.MDC_PULS_OXIM_SAT_O2;
  */
 public abstract class OpenICEAbstractFactory {
 
-    private static PulseOximeterFactory pulseOximeterFactory = null;
-    private static ElectroCardioGramFactory ECGFactory = null;
-    private static NoninvasiveBloodPressureFactory BPFactory = null;
-    private static CapnometerFactory capnometerFactory = null;
-    private static MultiparameterMonitorFactory multiParameterMonitorFactory = null;
-    private static TempuratureProbeFactory tempProbeFactory = null;
-    private static InfusionPumpFactory infusionPumpFactory = null;
 
     ///Creates data package for Adapter pattern for simulated data
+    //TODO: Unimplemented. We were unable to test with real data any implementation would have been
+    //TODO: error prone.
     abstract Monitor PackageOpenICESimulatedData(String data);
 
     ///Creates data package for Adapter pattern for real time data
@@ -26,58 +21,23 @@ public abstract class OpenICEAbstractFactory {
 
     //TODO: add each type value
     public static OpenICEAbstractFactory GetSimulatedFactory(String factoryType){
-        if(factoryType != null && !factoryType.isEmpty()){
-            switch(factoryType){
-                //PULSE OX PULSE RATE
-                case "Pulse Rate (PulseOX)":
-                    if(pulseOximeterFactory == null) {
-                        pulseOximeterFactory = new PulseOximeterFactory();
-                    }
-                    return pulseOximeterFactory;
-                case "SpO2 (PulseOX)":
-                    if(pulseOximeterFactory == null) {
-                        pulseOximeterFactory = new PulseOximeterFactory();
-                    }
-                    return pulseOximeterFactory;
-                case "Heart Rate (ECG)":
-                    if(ECGFactory == null) {
-                        ECGFactory = new ElectroCardioGramFactory();
-                    }
-                    return ECGFactory;
-                case "Systolic BP (CUFF)":
-                    if(BPFactory == null) {
-                        BPFactory = new NoninvasiveBloodPressureFactory();
-                    }
-                    return BPFactory;
-                case "Simulated Capnometer":
-                    if(capnometerFactory == null) {
-                        capnometerFactory = new CapnometerFactory();
-                    }
-                    return capnometerFactory;
-                case "Simulated Infusion Pump":
-                    if(infusionPumpFactory == null) {
-                        infusionPumpFactory = new InfusionPumpFactory();
-                    }
-                    return infusionPumpFactory;
-                case "Simulated Multiparameter Monitor":
-                    if(multiParameterMonitorFactory == null) {
-                        multiParameterMonitorFactory = new MultiparameterMonitorFactory();
-                    }
-                    return multiParameterMonitorFactory;
-                case "Simulated Temp Probe":
-                    if(tempProbeFactory == null) {
-                        tempProbeFactory = new TempuratureProbeFactory();
-                    }
-                    return tempProbeFactory;
-                default:
-                    return null;
-                }
+        if(factoryType.equalsIgnoreCase("Simulated ElectroCardioGram HR") ||factoryType.equalsIgnoreCase("Simulated ElectroCardioGram Resp Rate")){
+            return new ElectroCardioGramFactory();
+        }
+        else if(factoryType.equalsIgnoreCase("Simulated Capnometer etCO2") ||factoryType.equalsIgnoreCase("Simulated Capnometer Resp Rate")){
+            return new CapnometerFactory();
+        }
+        else if(factoryType.equalsIgnoreCase("Simulated Noninvasive BP SYS") ||factoryType.equalsIgnoreCase("Simulated Noninvasive BP DIA")||
+                factoryType.equalsIgnoreCase("Simulated Noninvasive BP NonInvasive")){
+            return new NoninvasiveBloodPressureFactory();
+        }
+        else if(factoryType.equalsIgnoreCase("Simulated Pulse Oximeter SpO2") ||factoryType.equalsIgnoreCase("Simulated Pulse Oximeter Pulse Rate")){
+            return new PulseOximeterFactory();
         }
         else{
             return null;
         }
     }
-
 
     ///Default constructor.
     public OpenICEAbstractFactory(){};

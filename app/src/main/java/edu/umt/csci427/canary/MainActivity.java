@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -142,10 +143,19 @@ public class MainActivity extends ActionBarActivity implements
         //Create factory
         //TODO: switch to just normal factory
         factory = OpenICEAbstractFactory.GetSimulatedFactory(monitorSelection[which]);
-        //Create monitor object
-        Monitor myMonitor = factory.PackageOpenICESimulatedData(monitorSelection[which]);
-        //Add to View Manager.
-        ViewManager.addMonitorToScreen(MonitorFragment.newInstance(myMonitor));
+
+        if(factory != null){
+            //Create monitor object
+            Monitor myMonitor = factory.PackageOpenICESimulatedData(monitorSelection[which]);
+            //Add to View Manager.
+            ViewManager.addMonitorToScreen(MonitorFragment.newInstance(myMonitor));
+        }
+        else{
+            ///show toast saying they cant add more.
+            Toast.makeText(this, monitorSelection[which] + " Factory not found.",
+                    Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 

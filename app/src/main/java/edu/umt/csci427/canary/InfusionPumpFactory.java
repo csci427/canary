@@ -6,7 +6,7 @@ import ice.Numeric;
  * Created by RYELAPTOP on 4/6/2015.
  */
 public class InfusionPumpFactory extends OpenICEAbstractFactory {
-
+    //Simulated infusion pump emits no data.
     public static final String factoryName = "SimulatedInfusionPumpFactory";
 
     @Override

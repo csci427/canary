@@ -16,10 +16,10 @@ public class PulseOximeterFactory extends OpenICEAbstractFactory {
     Monitor PackageOpenICESimulatedData(String data) {
 
         Monitor myData = null;
-        if(data != null && data.equals("Pulse Rate (PulseOX)")){//comment out if you want all values to go through
+        if(data != null && data.equals("Simulated Pulse Oximeter Pulse Rate")){//comment out if you want all values to go through
             myData = Monitor.newInstance(MDC_PULS_OXIM_PULS_RATE.VALUE, "BPM", data);//TODO: true should match a unique device id.
         }
-        else if(data != null && data.equals("SpO2 (PulseOX)")){//comment out if you want all values to go through
+        else if(data != null && data.equals("Simulated Pulse Oximeter SpO2")){//comment out if you want all values to go through
             myData = Monitor.newInstance(MDC_PULS_OXIM_SAT_O2.VALUE, "%", data);//TODO: true should match a unique device id.
         }
         else{

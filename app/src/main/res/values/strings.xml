@@ -10,23 +10,26 @@
     <string name="line_start">Line-In Start</string>
     <string name="line_stop">Line-In Stop</string>
 
+    <!--List of supported Simulated devices-->
     <string-array name="monitor_list">
-        <item>Pulse Rate (PulseOX)</item>
-        <item>Heart Rate (ECG)</item>
-        <item>SpO2 (PulseOX)</item>
-        <item>Systolic BP (CUFF)</item>
-        <item>Simulated Capnometer</item>
-        <item>Simulated Infusion Pump</item>
-        <item>Simulated Multiparameter Monitor</item>
-        <item>Simulated Noninvasive BP</item>
-        <item>Simulated Pulse Oximeter</item>
-        <item>Simulated Temp Probe</item>
-    </string-array>
+        <item>Simulated ElectroCardioGram HR</item>
+        <item>Simulated ElectroCardioGram Resp Rate</item>
+        <item>Simulated Capnometer etCO2</item>
+        <item>Simulated Capnometer Resp Rate</item>
+        <!--<item>Simulated Infusion Pump</item>-->
+        <!--<item>Simulated Multiparameter Monitor</item>-->
+         <item>Simulated Noninvasive BP SYS</item>
+         <item>Simulated Noninvasive BP DIA</item>
+         <item>Simulated Noninvasive BP NonInvasive</item>
+         <item>Simulated Pulse Oximeter SpO2</item>
+         <item>Simulated Pulse Oximeter Pulse Rate</item>
+        <!--<item>Simulated Temp Probe</item>-->
+     </string-array>
 
-    <string-array name="monitor_names">
-        <item>PulseOxHR</item>
-        <item>ECG</item>
-        <item>PulseOx</item>
-        <item>PulseOx</item>
-    </string-array>
-</resources>
+     <string-array name="monitor_names">
+         <item>PulseOxHR</item>
+         <item>ECG</item>
+         <item>PulseOx</item>
+         <item>PulseOx</item>
+     </string-array>
+ </resources>

@@ -16,10 +16,10 @@ public class CapnometerFactory extends OpenICEAbstractFactory {
 
         Monitor myData = null;
         if(data != null && data.equals("Simulated Capnometer etCO2")){//comment out if you want all values to go through
-            myData = Monitor.newInstance(MDC_AWAY_CO2_ET.VALUE, "etCO2", data);//TODO: true should match a unique device id.
+            myData = Monitor.newInstance(data, "etCO2", MDC_AWAY_CO2_ET.VALUE);//TODO: true should match a unique device id.
         }
         else if(data != null && data.equals("Simulated Capnometer Resp Rate")){
-            myData = Monitor.newInstance(MDC_CO2_RESP_RATE.VALUE, "Respiratory Rate", data);
+            myData = Monitor.newInstance(data, "Respiratory Rate", MDC_CO2_RESP_RATE.VALUE);
         }
         else{
             System.out.println(factoryName + "Data is null or not simulated.");

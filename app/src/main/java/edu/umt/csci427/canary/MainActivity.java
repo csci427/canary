@@ -16,12 +16,9 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import ice.Numeric;
-
 
 public class MainActivity extends ActionBarActivity implements
         MonitorFragment.OnMonitorFragmentInteractionListener,
-        ThresholdFragment.OnFragmentInteractionListener,
         AddMonitorFragment.AddMonitorListener {
 
     AlertService mService;
@@ -138,7 +135,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onMonitorListClick(DialogFragment dialog, int which) {
 
-        //Retreive selection array
+        //Retrieve selection array
         String[] monitorSelection = getResources().getStringArray(R.array.monitor_list);
         //Create factory
         //TODO: switch to just normal factory
@@ -147,16 +144,21 @@ public class MainActivity extends ActionBarActivity implements
         if(factory != null){
             //Create monitor object
             Monitor myMonitor = factory.PackageOpenICESimulatedData(monitorSelection[which]);
+
             //Add to View Manager.
             ViewManager.addMonitorToScreen(MonitorFragment.newInstance(myMonitor));
+
+            //Prompt user to set thresholds
+            ThresholdFragment thresholdsFrag = new ThresholdFragment();
+            thresholdsFrag.setMonitor(myMonitor);
+            thresholdsFrag.show(getSupportFragmentManager(), "ThresholdsFragment");
+
         }
         else{
             ///show toast saying they cant add more.
             Toast.makeText(this, monitorSelection[which] + " Factory not found.",
                     Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     @Override

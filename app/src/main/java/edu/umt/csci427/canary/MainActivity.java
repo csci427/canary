@@ -130,8 +130,6 @@ public class MainActivity extends ActionBarActivity implements
     }
 
 
-    //@Override
-    public void onFragmentInteraction(Uri uri) {}
 
 
     @Override
@@ -161,11 +159,19 @@ public class MainActivity extends ActionBarActivity implements
         }
     }
 
+    /**
+     * Overridden methods necessary.
+     */
     @Override
     public void onDestroy(){
+        //Stop the OpenICE service.
         stopService(new Intent(this, OpenICEService.class));
         super.onDestroy();
     }
+
+    //Overriding this method keeps the back button from being pressed and executing.
+    @Override
+    public void onBackPressed(){}
 
     /*****************************************
      * When a fragment is attached to the activity

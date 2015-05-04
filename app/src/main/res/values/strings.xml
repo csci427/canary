@@ -14,7 +14,8 @@
     <!--List of supported Simulated devices-->
     <string-array name="monitor_list">
         <item>Simulated ElectroCardioGram HR</item>
-        <item>Simulated ElectroCardioGram Resp Rate</item>
+        <!--Resp rate not supported for ECG
+        <item>Simulated ElectroCardioGram Resp Rate</item>-->
         <item>Simulated Capnometer etCO2</item>
         <item>Simulated Capnometer Resp Rate</item>
         <!--<item>Simulated Infusion Pump</item>-->

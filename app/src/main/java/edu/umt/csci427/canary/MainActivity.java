@@ -15,14 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 import java.util.List;
-import ice.Numeric;
-import java.util.ArrayList;
-import java.util.List;
-import android.widget.Toast;
-import rosetta.MDC_ECG_HEART_RATE;
-import rosetta.MDC_PRESS_CUFF_SYS;
-import rosetta.MDC_PULS_OXIM_PULS_RATE;
-import rosetta.MDC_PULS_OXIM_SAT_O2;
 
 public class MainActivity extends ActionBarActivity implements
         MonitorFragment.OnMonitorFragmentInteractionListener,
@@ -32,11 +24,6 @@ public class MainActivity extends ActionBarActivity implements
     boolean mBound = false;
     //Will create the monitors
     private OpenICEAbstractFactory factory = null;
-
-    //List that contains the tags of all the Monitors added,
-    //This allows us to remove them all and add them all on resume.
-    private List<String> attachedFragmentsList = null;
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -153,7 +140,6 @@ public class MainActivity extends ActionBarActivity implements
         //Retrieve selection array
         String[] monitorSelection = getResources().getStringArray(R.array.monitor_list);
         //Create factory
-        //TODO: switch to just normal factory
         factory = OpenICEAbstractFactory.GetSimulatedFactory(monitorSelection[which]);
 
         if(factory != null){

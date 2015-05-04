@@ -16,7 +16,8 @@ and destroyed when the app is shut down.
  */
 public class OpenICEService extends Service {
 
-    //connects with hello-openice
+    //connects with hello-openice not giving the user the ability to change this becasue
+    //it is specific for the adapter, which they cannot change.
     private int domainId = 15;
     ///Thread to run hello-openice, this is needed so that it won't interfere or lock down the UI.
     private Thread thread = null;
@@ -32,9 +33,9 @@ public class OpenICEService extends Service {
             myICE = new OpenICE(getApplicationContext(), domainId, this);
         }
 
-        /**************************************************
+        /**
         CREATE THREAD AND SET PRIORITY TO RUN IN BACKGROUND
-         ***************************************************/
+         */
         if(this.thread == null){
             thread = new Thread(myICE);
             thread.setPriority(Process.THREAD_PRIORITY_BACKGROUND);

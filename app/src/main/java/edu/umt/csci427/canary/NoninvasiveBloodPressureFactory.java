@@ -1,7 +1,5 @@
 package edu.umt.csci427.canary;
 
-import ice.Numeric;
-import rosetta.MDC_ECG_HEART_RATE;
 import rosetta.MDC_PRESS_CUFF_DIA;
 import rosetta.MDC_PRESS_CUFF_SYS;
 import rosetta.MDC_PULS_RATE_NON_INV;
@@ -17,13 +15,13 @@ public class NoninvasiveBloodPressureFactory extends OpenICEAbstractFactory{
 
         Monitor myData = null;
         if(data != null && data.equals("Simulated Noninvasive BP SYS")){//comment out if you want all values to go through
-            myData = Monitor.newInstance(MDC_PRESS_CUFF_SYS.VALUE, "mmHg", data);//TODO: true should match a unique device id.
+            myData = Monitor.newInstance(data, "mmHg", MDC_PRESS_CUFF_SYS.VALUE);//TODO: true should match a unique device id.
         }
         else if(data != null && data.equals("Simulated Noninvasive BP DIA")){//comment out if you want all values to go through
-            myData = Monitor.newInstance(MDC_PRESS_CUFF_DIA.VALUE, "mmHg", data);//TODO: true should match a unique device id.
+            myData = Monitor.newInstance(data, "mmHg", MDC_PRESS_CUFF_DIA.VALUE);//TODO: true should match a unique device id.
         }
         else if(data != null && data.equals("Simulated Noninvasive BP NonInvasive")){//comment out if you want all values to go through
-            myData = Monitor.newInstance(MDC_PULS_RATE_NON_INV.VALUE, "BPM", data);//TODO: true should match a unique device id.
+            myData = Monitor.newInstance(data, "BPM", MDC_PULS_RATE_NON_INV.VALUE);//TODO: true should match a unique device id.
         }
         else{
             System.out.println(factoryName + "Data is null or not simulated.");

@@ -39,7 +39,6 @@ public class CapnometerFactory extends OpenICEAbstractFactory {
             System.out.println(factoryName + "Data is null or not simulated.");
         }
 
-
         thresholdFragment.setMonitor(myData);
         myData.setThresholdFragment(thresholdFragment);
 

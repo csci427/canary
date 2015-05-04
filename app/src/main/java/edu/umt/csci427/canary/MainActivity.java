@@ -149,9 +149,8 @@ public class MainActivity extends ActionBarActivity implements
             ViewManager.addMonitorToScreen(MonitorFragment.newInstance(myMonitor));
 
             //Prompt user to set thresholds
-            ThresholdFragment thresholdsFrag = new ThresholdFragment();
-            thresholdsFrag.setMonitor(myMonitor);
-            thresholdsFrag.show(getSupportFragmentManager(), "ThresholdsFragment");
+            ThresholdFragment thresholdsFrag = myMonitor.getThresholdFragment();
+            thresholdsFrag.show(getFragmentManager(), "ThresholdsFragment");
 
         }
         else{

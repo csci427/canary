@@ -31,7 +31,6 @@ public class MonitorFragment extends Fragment {
 
     private static Monitor monitor;
     private OnMonitorFragmentInteractionListener mListener;
-    private AlertService mService;
 
     /**
      * Use this factory method to create a new instance of
@@ -76,10 +75,7 @@ public class MonitorFragment extends Fragment {
         if (getArguments() != null) {
             // Retain this fragment across configuration changes.
             setRetainInstance(true);
-            mService.addListener(monitor.getMetric_id(),150,50);
         }
-
-
     }
 
     @Override
@@ -150,7 +146,6 @@ public class MonitorFragment extends Fragment {
         super.onAttach(activity);
         try {
             mListener = (OnMonitorFragmentInteractionListener) activity;
-            mService = mListener.getAlertService();
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }

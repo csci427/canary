@@ -10,6 +10,7 @@
     <string name="line_start">Line-In Start</string>
     <string name="line_stop">Line-In Stop</string>
 
+
     <!--List of supported Simulated devices-->
     <string-array name="monitor_list">
         <item>Simulated ElectroCardioGram HR</item>

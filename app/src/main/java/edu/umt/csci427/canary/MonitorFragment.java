@@ -114,12 +114,10 @@ public class MonitorFragment extends Fragment {
         @Override
         public void onClick(View V)
         {
-          /*  getFragmentManager().beginTransaction()
-                    .hide(getFragmentManager().findFragmentByTag(monitor.getTitle()));
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, ThresholdFragment.newInstance("bogus1", "bogus2"))
-                    .commit();
-        }*/}
+            //Prompt user to set thresholds
+            ThresholdFragment thresholdsFrag = monitor.getThresholdFragment();
+            thresholdsFrag.show(getFragmentManager(), "ThresholdsFragment");
+        }
     }
 
     private class monitorButtonLongListener implements View.OnLongClickListener

@@ -1,9 +1,13 @@
 package edu.umt.csci427.canary;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -11,10 +15,11 @@ import java.util.List;
  */
 public class ViewManager
 {
-
     public static final int MAX_MONITORS = 4;
 
-    private static List<MonitorFragment> monitors = new ArrayList<>();
+    private static HashMap<String, MonitorFragment> monitors = new HashMap<>();
+    private static boolean[] openContainers = {true, true, true, true};
+    private static HashMap<Integer, String> containerMap = new HashMap<>();
     private static int mCOUNT() { return monitors.size(); }
     private static MainActivity main;
 
@@ -29,13 +34,20 @@ public class ViewManager
                     Toast.LENGTH_SHORT).show();
         }
         else{
-
-            monitors.add(m);
+            monitors.put(m.getMonitorTitle(), m);
             ArrangeMonitors(mCOUNT());
         }
-
-
         return true;
+    }
+
+    private static void removeAllFragmentsFromView()
+    {
+        for (String k : monitors.keySet())
+        {
+            main.getFragmentManager().beginTransaction()
+                    .remove(monitors.get(k))
+                    .commit();
+        }
     }
 
     /**
@@ -49,24 +61,17 @@ public class ViewManager
         try{
             //If the number of monitors matches at this point we want to add the entire array
             //If not we don't want to cause exceptions.
-            if(numberOfMonitorsInArray <= MAX_MONITORS){
+            if(numberOfMonitorsInArray <= MAX_MONITORS) {
                 //For each monitor fragment add them to the respective layout.
-                for(int i = numberOfMonitorsInArray -1; i < mCOUNT(); i++){
-                    if(main.getFragmentManager().findFragmentByTag(layoutToPlaceMonitorIn + i) == null){
+                int pos = 0;
+                for (String k : monitors.keySet()) {
+                        pos = findNextOpenPosition(pos);
                         main.getFragmentManager().beginTransaction()
-                                .add(R.id.class.getField(layoutToPlaceMonitorIn + i).getInt(0), monitors.get(i), layoutToPlaceMonitorIn + i)
+                                .add(R.id.class.getField(layoutToPlaceMonitorIn + pos).getInt(0),
+                                        monitors.get(k), monitors.get(k).getMonitorTitle())
                                 .commit();
                         success = true;
-                    }
-                    else{
-                        main.getFragmentManager().beginTransaction()
-                                .replace(R.id.class.getField(layoutToPlaceMonitorIn + i).getInt(0), monitors.get(i))
-                                .commit();
-                        success = true;
-                    }
-
-
-
+                        openContainers[pos] = false;
                 }
             }
             else{
@@ -79,17 +84,38 @@ public class ViewManager
         return success;
     }
 
-    public static boolean removeMonitorFromScreen(MonitorFragment m)
+    private static int findNextOpenPosition(int start)
     {
-        if (monitors.contains(m))
+        if (!openContainers[start]) { findNextOpenPosition(++start); }
+        return start;
+    }
+
+    public static boolean removeMonitorFromScreen(View v, final MonitorFragment m)
+    {
+        try
         {
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle("Remove Fragment")
+                    .setMessage("Do you want to remove monitor?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            main.getFragmentManager().beginTransaction()
+                                    .remove(m)
+                                    .commit();
+                            //main.getFragmentManager().executePendingTransactions();
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
             monitors.remove(m);
-            ArrangeMonitors(mCOUNT());
+            //ArrangeMonitors(mCOUNT());
         }
-        else{
+        catch (Exception ex)
+        {
             Log.d("Canary Media Player", "Error arranging removing monitor || " + m.getTag());
         }
         return true;
     }
+
+
 
 }

@@ -124,18 +124,8 @@ public class MonitorFragment extends Fragment {
     {
         @Override
         public boolean onLongClick(View v) {
-            new AlertDialog.Builder(v.getContext())
-                    .setTitle("Remove Fragment")
-                    .setMessage("Do you want to remove monitor?")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            getFragmentManager().beginTransaction()
-                                    .remove(getFragmentManager().findFragmentByTag(monitor.getTitle()))
-                                    .commit();
-                            getFragmentManager().executePendingTransactions();
-                        }})
-                    .setNegativeButton(android.R.string.no, null).show();
+                ViewManager.removeMonitorFromScreen(v,
+                        (MonitorFragment)getFragmentManager().findFragmentByTag(monitor.getTitle()));
             return true;
         }
     }
@@ -154,6 +144,8 @@ public class MonitorFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+    public String getMonitorTitle() { return monitor.getTitle(); }
 
     /**
      * Override needed to fix crash when rotating screen
@@ -174,9 +166,7 @@ public class MonitorFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnMonitorFragmentInteractionListener {
-        public void onFragmentInteraction();
         public void launchThresholdOnClick();
-
         public AlertService getAlertService();
     }
 

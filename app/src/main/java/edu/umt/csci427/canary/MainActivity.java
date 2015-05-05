@@ -111,23 +111,16 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void onFragmentInteraction()
-    {
-
-    }
-
-    @Override
     public void launchThresholdOnClick()
     {
-        onFragmentInteraction();
+
     }
 
     @Override
-    public AlertService getAlertService() {
+    public AlertService getAlertService()
+    {
         return mService;
     }
-
-
 
 
     @Override

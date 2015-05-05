@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.rti.dds.util.ArraySequence;
+
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,13 +19,13 @@ import java.util.List;
 public class ViewManager
 {
     public static final int MAX_MONITORS = 4;
-    public static int MonitorCount = 0;
 
     private static HashMap<String, MonitorFragment> monitors = new HashMap<>();
     private static boolean[] openContainers = {true, true, true, true};
     private static HashMap<String, Integer> containerMap = new HashMap<>();
     private static int mCOUNT() { return monitors.size(); }
     private static MainActivity main;
+
 
     public static void attachMainActivity(MainActivity main) { ViewManager.main = main; }
 
@@ -67,8 +69,8 @@ public class ViewManager
                 //For each monitor fragment add them to the respective layout.
                 int pos = 0;
                 for (String k : monitors.keySet()) {
-                        pos = numberOfMonitorsInArray - 1;//findNextOpenPosition(pos);
-                        if(openContainers[pos] == true && !monitors.get(k).isAdded()) {
+                        pos = findNextOpenPosition(pos);
+                        if(!monitors.get(k).isAdded()) {
                             main.getFragmentManager().beginTransaction()
                                     .add(R.id.class.getField(layoutToPlaceMonitorIn + pos).getInt(0),
                                             monitors.get(k), monitors.get(k).getMonitorTitle())
@@ -108,11 +110,10 @@ public class ViewManager
                             main.getFragmentManager().beginTransaction()
                                     .remove(m)
                                     .commit();
-                            //main.getFragmentManager().executePendingTransactions();
+
+                            resolveOpenContainers(m);
                         }})
                     .setNegativeButton(android.R.string.no, null).show();
-            resolveOpenContainers(m);
-            //ArrangeMonitors(mCOUNT());
         }
         catch (Exception ex)
         {
@@ -122,19 +123,9 @@ public class ViewManager
     }
 
     public static void resolveOpenContainers(MonitorFragment monitor){
-        String monitorTitle = monitor.getMonitorTitle();
-        monitors.remove(monitor);
-        monitors.remove(monitorTitle);
-        //What if they are adding the same monitor?
-        int openContainer = containerMap.get(monitorTitle);
-        openContainers[openContainer] = true;
-        containerMap.remove(monitorTitle);
-        containerMap.remove(openContainer);
-
-
+        int monitorPosition = containerMap.get(monitor.getMonitorTitle());
+        monitors.remove(monitor.getMonitorTitle());
+        openContainers[monitorPosition] = true;
 
     }
-
-
-
 }

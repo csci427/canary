@@ -38,12 +38,26 @@ public class ViewManager
                     Toast.LENGTH_SHORT).show();
         }
         else{
-            monitors.put(m.getMonitorTitle(), m);
-            ArrangeMonitors(mCOUNT());
+            if(AddMonitorToHashMap(m)){
+                ArrangeMonitors(mCOUNT());
+            }else{
+                ///show toast saying they cant add more.
+                Toast.makeText(ViewManager.main, "Monitor of that type has already been added.",
+                        Toast.LENGTH_SHORT).show();
+            }
+
         }
         return true;
     }
 
+    private static boolean AddMonitorToHashMap(MonitorFragment m){
+        boolean result = false;
+        if(!monitors.containsKey(m.getMonitorTitle())){
+            monitors.put(m.getMonitorTitle(), m);
+            result = true;
+        }
+        return result;
+    }
     private static void removeAllFragmentsFromView()
     {
         for (String k : monitors.keySet())
@@ -69,7 +83,7 @@ public class ViewManager
                 //For each monitor fragment add them to the respective layout.
                 int pos = 0;
                 for (String k : monitors.keySet()) {
-                        pos = findNextOpenPosition(pos);
+                        pos = findNextOpenPosition();
                         if(!monitors.get(k).isAdded()) {
                             main.getFragmentManager().beginTransaction()
                                     .add(R.id.class.getField(layoutToPlaceMonitorIn + pos).getInt(0),
@@ -91,10 +105,17 @@ public class ViewManager
         return success;
     }
 
-    private static int findNextOpenPosition(int start)
-    {
-        if (!openContainers[start]) { findNextOpenPosition(++start); }
-        return start;
+    private static int findNextOpenPosition()
+    {   int result = 0;
+        for(boolean container : openContainers){
+            if(container){
+                return result;
+            }
+            else{
+                result += 1;
+            }
+        }
+        return result;
     }
 
     public static boolean removeMonitorFromScreen(View v, final MonitorFragment m)

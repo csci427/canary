@@ -37,12 +37,12 @@ public class twoThresholdFragment extends ThresholdFragment {
 
 
         // Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         // create layout
         View menuView = inflater.inflate(R.layout.fragment_threshold, null);
-        SeekBar lowBar = (SeekBar) menuView.findViewById(R.id.lowSeekBar);
+        final SeekBar lowBar = (SeekBar) menuView.findViewById(R.id.lowSeekBar);
         SeekBar highBar = (SeekBar) menuView.findViewById(R.id.highSeekBar);
 
         // set default progress on both threshold bars
@@ -50,8 +50,10 @@ public class twoThresholdFragment extends ThresholdFragment {
         highBar.setProgress(highThreshold);
 
         // set maximum
-        lowBar.setMax(thresholdMax);
         highBar.setMax(thresholdMax);
+
+        // low bar max will be highThreshold
+        lowBar.setMax(highThreshold);
 
         // high seek bar text
         highTextView = (TextView) menuView.findViewById(R.id.highSeekBarText);
@@ -84,7 +86,9 @@ public class twoThresholdFragment extends ThresholdFragment {
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                lowBar.setMax(highThreshold);
+            }
         });
 
         // set PositiveButton to set thresholds in the MainActivity
@@ -95,6 +99,7 @@ public class twoThresholdFragment extends ThresholdFragment {
                         alertService.CreateOrModifyListener(monitor.getMetric_id(),(double) highThreshold, (double) lowThreshold);
                     }
                 });
+
         return builder.create();
     }
 

@@ -1,104 +1,54 @@
 package edu.umt.csci427.canary;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
+import android.app.DialogFragment;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ThresholdFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ThresholdFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Abstract class with two and one threshold fragment as children. One threshold fragment is currenly
+ * only used to set SpO2, as having a high threshold doesn't really make any sense.
  */
-public class ThresholdFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public abstract class ThresholdFragment extends DialogFragment{
+    abstract void setMonitor(Monitor monitor);
+    abstract void setDefaultThresholds(int high, int low);
+    abstract void setMax(int max);
+    abstract int getLowThreshold();
+    abstract int getHighThreshold();
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public Monitor monitor;
+    public String tag;
+    public boolean thresholdsSet = false;
 
-    private OnFragmentInteractionListener mListener;
+    // Use this instance of the interface to deliver action events
+    protected ThresholdFragmentListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ThresholdFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ThresholdFragment newInstance(String param1, String param2) {
-        ThresholdFragment fragment = new ThresholdFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    /** The activity that creates an instance of this dialog fragment must
+    * implement this interface in order to receive event callbacks.
+    * Each method passes the DialogFragment in case the host needs to query it. */
+    public interface ThresholdFragmentListener {
+        void onThresholdFragmentPositiveClick(ThresholdFragment dialog);
     }
 
-    public ThresholdFragment() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_threshold, container, false);
-    }
-
+    // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        // Verify that the host activity implements the callback interface
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            mListener = (ThresholdFragmentListener) activity;
         } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement ThresholdFragmentListener");
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void setTag(String tag){
+        this.tag = tag;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
+    public String getMonitorTag(){
+        return tag;
     }
-
-    @Override
-    public void onDestroyView(){
-        super.onDestroyView();
-    }
-
 }
+

@@ -6,13 +6,24 @@ import ice.Numeric;
  * Created by RYELAPTOP on 4/6/2015.
  */
 public class MultiparameterMonitorFactory extends OpenICEAbstractFactory {
+    //MultiParameter monitor has pulse ox ECG and Capnometer all in one.
+    public static final String factoryName = "MultiparameterMonitorFactory";
+
     @Override
-    OpenICEDataPackage PackageOpenICESimulatedData(Numeric data) {
-        return null;
+    Monitor PackageOpenICESimulatedData(String data) {
+
+        Monitor myData = null;
+        if(data != null && data.equals("Simulated Multiparameter Monitor")){//comment out if you want all values to go through
+            myData = Monitor.newInstance("", "BPM", data);//TODO: true should match a unique device id.
+        }
+        else{
+            System.out.println(factoryName + "Data is null or not simulated.");
+        }
+        return myData;
     }
 
     @Override
-    OpenICEDataPackage PackageOpenICERealTimeData(Numeric data) {
+    Monitor PackageOpenICERealTimeData(String data) {
         return null;
     }
 }

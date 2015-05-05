@@ -1,10 +1,7 @@
 package edu.umt.csci427.canary;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
-import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -13,67 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MonitorFragment.OnMonitorFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MonitorFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MonitorFragment extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    public static final String ARG_PARAM1 = "title";
-    private static final String ARG_PARAM2 = "units";
-    private static final String ARG_PARAM3 = "value";
-    private static final String ARG_PARAM4 = "metric_id";
-
     private Monitor monitor;
-    private OnMonitorFragmentInteractionListener mListener;
-    private AlertService mService;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param title Title which will be displayed in the monitor.
-     * @param units Units the value uses, if applicable.
-     * @param metric_id Action of broadcasts that we should receive
-     * @return A new instance of fragment MonitorFragment.
-     */
-
-    public static MonitorFragment newInstance(String title, String units, String metric_id) {
-        MonitorFragment fragment = new MonitorFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, title);
-        args.putString(ARG_PARAM2, units);
-        args.putString(ARG_PARAM4, metric_id);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
 
     public MonitorFragment() {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            // Retain this fragment across configuration changes.
-            setRetainInstance(true);
-
-            monitor = Monitor.newInstance(
-                    getArguments().getString(ARG_PARAM1),
-                    getArguments().getString(ARG_PARAM2),
-                    getArguments().getString(ARG_PARAM4)
-            );
-            mService.addListener(monitor.getMetric_id(),150,50);
-        }
-
-
+    public void setMonitor(Monitor monitor) {
+        this.monitor = monitor;
     }
 
     @Override
@@ -106,19 +52,45 @@ public class MonitorFragment extends Fragment {
         valTv.setOnClickListener(new monitorButtonShortListener());
         valTv.setOnLongClickListener(new monitorButtonLongListener());
 
+        //Prompt user to set thresholds if not already set
+        ThresholdFragment thresholdsFrag = monitor.getThresholdFragment();
 
+        if (!thresholdsFrag.thresholdsSet) {
+            //set tag for later use in callback method (onThresholdFragmentPositiveClick)
+            thresholdsFrag.setTag(this.getTag());
+            thresholdsFrag.show(getFragmentManager(), "ThresholdsFragment");
+        }
     }
+
+    public String getMonitorTitle() { return monitor.getTitle(); }
 
     private class monitorButtonShortListener implements View.OnClickListener
     {
         @Override
         public void onClick(View V)
         {
-            getFragmentManager().beginTransaction()
-                    .hide(getFragmentManager().findFragmentByTag(monitor.getTitle()));
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, ThresholdFragment.newInstance("bogus1", "bogus2"))
-                    .commit();
+            // Prompt user to set thresholds
+            ThresholdFragment thresholdsFrag = monitor.getThresholdFragment();
+            thresholdsFrag.show(getFragmentManager(), "ThresholdsFragment");
+        }
+    }
+
+    // set the threshold views to values in the monitor (thresholdFragment has the same instance)
+    public void setThresholdTextViews() {
+        TextView valTv;
+        // set low threshold test
+        valTv = (TextView)getView().findViewById(R.id.lowThreshold);
+        valTv.setText("low threshold: " + monitor.getThresholdFragment().getLowThreshold());
+
+        if(!(monitor.getThresholdFragment() instanceof oneThresholdFragment)) {
+
+            // set high threshold test
+            valTv = (TextView) getView().findViewById(R.id.highThreshold);
+            valTv.setText("high threshold: " + monitor.getThresholdFragment().getHighThreshold());
+        } else {
+            // set high threshold test
+            valTv = (TextView) getView().findViewById(R.id.highThreshold);
+            valTv.setText("");
         }
     }
 
@@ -126,66 +98,9 @@ public class MonitorFragment extends Fragment {
     {
         @Override
         public boolean onLongClick(View v) {
-            new AlertDialog.Builder(v.getContext())
-                    .setTitle("Remove Fragment")
-                    .setMessage("Do you want to remove monitor?")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            getFragmentManager().beginTransaction()
-                                    .remove(getFragmentManager().findFragmentByTag(monitor.getTitle()))
-                                    .commit();
-                            getFragmentManager().executePendingTransactions();
-                        }})
-                    .setNegativeButton(android.R.string.no, null).show();
+                ViewManager.removeMonitorFromScreen(v,
+                        (MonitorFragment)getFragmentManager().findFragmentByTag(monitor.getTitle()));
             return true;
         }
     }
-
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnMonitorFragmentInteractionListener) activity;
-            mService = mListener.getAlertService();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * Override needed to fix crash when rotating screen
-     **/
-    @Override
-    public void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnMonitorFragmentInteractionListener {
-        public void onFragmentInteraction();
-        public void launchThresholdOnClick();
-
-        public AlertService getAlertService();
-    }
-
-    @Override
-    public void onDestroyView(){
-        super.onDestroyView();
-    }
-
 }

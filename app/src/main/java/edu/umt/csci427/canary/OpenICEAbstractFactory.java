@@ -5,42 +5,29 @@ package edu.umt.csci427.canary;
  */
 public abstract class OpenICEAbstractFactory {
 
-    private PulseOximeterFactory pulseOximeterFactory = null;
 
     ///Creates data package for Adapter pattern for simulated data
-    abstract OpenICEDataPackage PackageOpenICESimulatedData(ice.Numeric data);
+    //TODO: Unimplemented. We were unable to test with real data any implementation would have been
+    //TODO: error prone.
+    abstract Monitor PackageOpenICESimulatedData(String data);
 
     ///Creates data package for Adapter pattern for real time data
-    abstract OpenICEDataPackage PackageOpenICERealTimeData(ice.Numeric data);
+    abstract Monitor PackageOpenICERealTimeData(String data);
 
-    public OpenICEAbstractFactory GetSimulatedFactory(String factoryType){
-        if(factoryType != null){
-            switch(factoryType){
-                case "PULSE_OX":
-                    if(pulseOximeterFactory == null) {
-                        pulseOximeterFactory = new PulseOximeterFactory();
-                    }
-                    return pulseOximeterFactory;
-                default:
-                    return null;
-                }
+    //TODO: add each type value
+    public static OpenICEAbstractFactory GetSimulatedFactory(String factoryType){
+        if(factoryType.equalsIgnoreCase("Simulated ElectroCardioGram HR") ||factoryType.equalsIgnoreCase("Simulated ElectroCardioGram Resp Rate")){
+            return new ElectroCardioGramFactory();
         }
-        else{
-            return null;
+        else if(factoryType.equalsIgnoreCase("Simulated Capnometer etCO2") ||factoryType.equalsIgnoreCase("Simulated Capnometer Resp Rate")){
+            return new CapnometerFactory();
         }
-    }
-
-    public OpenICEAbstractFactory GetRealTimeDataFactory(String factoryType){
-        if(factoryType != null){
-            switch(factoryType){
-                case "PULSE_OX":
-                    if(pulseOximeterFactory == null) {//TODO: turn into real device
-                        pulseOximeterFactory = new PulseOximeterFactory();
-                    }
-                    return pulseOximeterFactory;
-                default:
-                    return null;
-            }
+        else if(factoryType.equalsIgnoreCase("Simulated Noninvasive BP SYS") ||factoryType.equalsIgnoreCase("Simulated Noninvasive BP DIA")||
+                factoryType.equalsIgnoreCase("Simulated Noninvasive BP Pulse Rate")){
+            return new NoninvasiveBloodPressureFactory();
+        }
+        else if(factoryType.equalsIgnoreCase("Simulated Pulse Oximeter SpO2") ||factoryType.equalsIgnoreCase("Simulated Pulse Oximeter Pulse Rate")){
+            return new PulseOximeterFactory();
         }
         else{
             return null;

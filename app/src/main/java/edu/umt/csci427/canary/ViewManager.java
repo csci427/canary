@@ -1,6 +1,13 @@
 package edu.umt.csci427.canary;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -8,10 +15,11 @@ import java.util.List;
  */
 public class ViewManager
 {
+    public static final int MAX_MONITORS = 4;
 
-    public static final int MAX_MONITORS = 1;
-
-    private static List<MonitorFragment> monitors = new ArrayList<>();
+    private static HashMap<String, MonitorFragment> monitors = new HashMap<>();
+    private static boolean[] openContainers = {true, true, true, true};
+    private static HashMap<Integer, String> containerMap = new HashMap<>();
     private static int mCOUNT() { return monitors.size(); }
     private static MainActivity main;
 
@@ -21,61 +29,93 @@ public class ViewManager
     {
         if (mCOUNT() + 1 > MAX_MONITORS)
         {
-            throw new UnsupportedOperationException("Cannot add more monitors to screen.");
+            ///show toast saying they cant add more.
+            Toast.makeText(ViewManager.main, "Maximum number of monitors already added. Cannot add more",
+                    Toast.LENGTH_SHORT).show();
         }
-
-        monitors.add(m);
-        arrange();
-
+        else{
+            monitors.put(m.getMonitorTitle(), m);
+            ArrangeMonitors(mCOUNT());
+        }
         return true;
     }
 
-    private static boolean arrange()
+    private static void removeAllFragmentsFromView()
     {
-        boolean ret = true;
-        switch(mCOUNT())
+        for (String k : monitors.keySet())
         {
-            case(1):
-                arrange1();
-                break;
-            case(2):
-                arrange2();
-                break;
-            case(3):
-                arrange3();
-                break;
-            case(4):
-                arrange4();
-                break;
-            default:
-                ret = false;
-                break;
-
+            main.getFragmentManager().beginTransaction()
+                    .remove(monitors.get(k))
+                    .commit();
         }
-        return ret;
     }
 
-    private static boolean arrange1()
-    {
-        main.getFragmentManager().beginTransaction()
-                .add(R.id.container, monitors.get(0), monitors.get(0).ARG_PARAM1)//TODO: change log param to be not ARG_PARAM1
-                .commit();
-        return true;
+    /**
+     * Arrange all of the monitors. We will only support 4 due to screen constraints.
+     * @param numberOfMonitorsInArray
+     * @return
+     */
+    private static boolean ArrangeMonitors(int numberOfMonitorsInArray) {
+        boolean success = false;
+        String layoutToPlaceMonitorIn = "monitor_container_";
+        try{
+            //If the number of monitors matches at this point we want to add the entire array
+            //If not we don't want to cause exceptions.
+            if(numberOfMonitorsInArray <= MAX_MONITORS) {
+                //For each monitor fragment add them to the respective layout.
+                int pos = 0;
+                for (String k : monitors.keySet()) {
+                        pos = findNextOpenPosition(pos);
+                        main.getFragmentManager().beginTransaction()
+                                .add(R.id.class.getField(layoutToPlaceMonitorIn + pos).getInt(0),
+                                        monitors.get(k), monitors.get(k).getMonitorTitle())
+                                .commit();
+                        success = true;
+                        openContainers[pos] = false;
+                }
+            }
+            else{
+                Log.d("Canary Media Player", "Error arranging " + numberOfMonitorsInArray + " monitors.");
+            }
+        }
+        catch(Exception ex){
+            Log.d("Canary Media Player", "Error arranging monitors || " + ex.toString());
+        }
+        return success;
     }
 
-    private static boolean arrange2() { throw new UnsupportedOperationException(); }
-    private static boolean arrange3() { throw new UnsupportedOperationException(); }
-    private static boolean arrange4() { throw new UnsupportedOperationException(); }
-
-    public boolean removeMonitorFromScreen(MonitorFragment m)
+    private static int findNextOpenPosition(int start)
     {
-        if (!monitors.contains(m))
+        if (!openContainers[start]) { findNextOpenPosition(++start); }
+        return start;
+    }
+
+    public static boolean removeMonitorFromScreen(View v, final MonitorFragment m)
+    {
+        try
         {
-            //throw new IndexOutOfBoundsException("Monitor does not exist.");
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle("Remove Fragment")
+                    .setMessage("Do you want to remove monitor?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            main.getFragmentManager().beginTransaction()
+                                    .remove(m)
+                                    .commit();
+                            //main.getFragmentManager().executePendingTransactions();
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
+            monitors.remove(m);
+            //ArrangeMonitors(mCOUNT());
         }
-        monitors.remove(m);
-        arrange();
+        catch (Exception ex)
+        {
+            Log.d("Canary Media Player", "Error arranging removing monitor || " + m.getTag());
+        }
         return true;
     }
+
+
 
 }

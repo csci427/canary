@@ -1,41 +1,25 @@
 package edu.umt.csci427.canary;
-
 import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Choreographer;
 import android.view.Menu;
 import android.view.MenuItem;
-import java.util.ArrayList;
-import java.util.List;
 import android.widget.Toast;
-import rosetta.MDC_ECG_HEART_RATE;
-import rosetta.MDC_PRESS_CUFF_SYS;
-import rosetta.MDC_PULS_OXIM_PULS_RATE;
-import rosetta.MDC_PULS_OXIM_SAT_O2;
-
 
 public class MainActivity extends ActionBarActivity implements
-        MonitorFragment.OnMonitorFragmentInteractionListener,
-        ThresholdFragment.OnFragmentInteractionListener,
-        AddMonitorFragment.AddMonitorListener {
+        AddMonitorFragment.AddMonitorListener,
+        ThresholdFragment.ThresholdFragmentListener{
 
-    AlertService mService;
-    boolean mBound = false;
-
-    //List that contains the tags of all the Monitors added,
-    //This allows us to remove them all and add them all on resume.
-    private List<String> attachedFragmentsList = null;
-
+    AlertService alertService;
+    boolean alertServiceBound = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +33,6 @@ public class MainActivity extends ActionBarActivity implements
 
             ViewManager.attachMainActivity(this);
         }
-
     }
 
     @Override
@@ -68,14 +51,14 @@ public class MainActivity extends ActionBarActivity implements
                                        IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             AlertService.LocalBinder binder = (AlertService.LocalBinder) service;
-            mService = binder.getService();
-            mBound = true;
+            alertService = binder.getService();
+            alertServiceBound = true;
             Log.v("ZZZ", "Service bound");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
+            alertServiceBound = false;
         }
     };
 
@@ -125,68 +108,43 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void onFragmentInteraction()
-    {
-
-    }
-
-    @Override
-    public void launchThresholdOnClick()
-    {
-        onFragmentInteraction();
-    }
-
-    @Override
-    public AlertService getAlertService() {
-        return mService;
-    }
-
-
-    //@Override
-    public void onFragmentInteraction(Uri uri) {}
-
-
-    @Override
     public void onMonitorListClick(DialogFragment dialog, int which) {
 
-        // TODO: These are horrible hard coded magic numbers... fix it... someone... besides me
+        //Retrieve selection array
+        String[] monitorSelection = getResources().getStringArray(R.array.monitor_list);
+        //Create factory
+        OpenICEAbstractFactory factory = OpenICEAbstractFactory.GetSimulatedFactory(monitorSelection[which]);
 
-        String title = "";
-        String units = "";
-        String metric_id = "";
+        if(factory != null){
+            //Create monitor object
+            Monitor myMonitor = factory.PackageOpenICESimulatedData(monitorSelection[which]);
 
-        switch (which){
-            case 0:
-                title = "Pulse rate (ox)";
-                units = "BPM";
-                metric_id = MDC_PULS_OXIM_PULS_RATE.VALUE;
-                break;
-            case 1:
-                title = "Heart (ECG)";
-                units = "BPM";
-                metric_id = MDC_ECG_HEART_RATE.VALUE;
-                break;
-            case 2:
-                title = "SpO2 (ox)";
-                units = "%";
-                metric_id = MDC_PULS_OXIM_SAT_O2.VALUE;
-                break;
-            case 3:
-                title = "Sys BP (cuff)";
-                units = "mmHg";
-                metric_id = MDC_PRESS_CUFF_SYS.VALUE;
-                break;
+            // create new monitorFragment
+            MonitorFragment monitorFragment = new MonitorFragment();
+            monitorFragment.setMonitor(myMonitor); // set data
+            ViewManager.addMonitorToScreen(monitorFragment);
+
         }
-
-        ViewManager.addMonitorToScreen(MonitorFragment.newInstance(title, units, metric_id));
-
+        else{
+            ///show toast saying they cant add more.
+            Toast.makeText(this, monitorSelection[which] + " Factory not found.",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
+    /**
+     * Overridden methods necessary.
+     */
     @Override
     public void onDestroy(){
+        //Stop the OpenICE service.
         stopService(new Intent(this, OpenICEService.class));
         super.onDestroy();
     }
+
+    //Overriding this method keeps the back button from being pressed and executing.
+    @Override
+    public void onBackPressed(){}
 
     /*****************************************
      * When a fragment is attached to the activity
@@ -196,7 +154,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onAttachFragment(Fragment fragment){
         //Instantiate the list if it needs to be.
-        if(attachedFragmentsList == null){
+     /*   if(attachedFragmentsList == null){
             attachedFragmentsList = new ArrayList<>();
         }
             //Check to make sure the tag is not null or whitespace.
@@ -204,8 +162,18 @@ public class MainActivity extends ActionBarActivity implements
             //Add this tag to the attachments list so we can find it later and remove it
             //in the on pause, and potentially re add it onResume.
             attachedFragmentsList.add(fragment.getTag());
-        }
+        }*/
         super.onAttachFragment(fragment);
+    }
+
+    @Override
+    public void onThresholdFragmentPositiveClick(ThresholdFragment dialog) {
+        alertService.CreateOrModifyListener(dialog.monitor.getMetric_id(),
+                dialog.getHighThreshold(), dialog.getLowThreshold());
+
+        // get the tag for the Monitor fragment stored in the thresholdFragment. Find this monitor
+        // fragment by tag and communicate that data has been changed.
+        ((MonitorFragment)getFragmentManager().findFragmentByTag(dialog.getMonitorTag())).setThresholdTextViews();
     }
 
     /********************************************

@@ -40,9 +40,9 @@ public class AlertService extends IntentService {
             // get value from intent
             double value = intent.getDoubleExtra(OpenICE.METRIC_VALUE, -1);
 
-            Log.v("ZZZ", Double.toString(value) + " " + high + " " + low + " " + (value > high || value < low));
+            Log.v("ZZZ", intent.getAction() + " " + Double.toString(value) + " " + high + " " + low + " " + (value >= high || value <= low));
 
-            if (value > high || value < low){
+            if (value >= high || value <= low){
                 myAudioManager.requestAudioFocus(myOnAudioFocusChangeListener,
                         AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
             }
@@ -56,28 +56,23 @@ public class AlertService extends IntentService {
         }
     }
 
-    public void changeThreshold(String metric_id, double high, double low){
+    public void CreateOrModifyListener(String metric_id, double high, double low){
 
+        // register listener if not registered, otherwise change values
         double[] value = thresholds.get(metric_id);
         if (value != null) {
-            throw new RuntimeException("Listener for that intent not registered");
+            thresholds.put(metric_id, new double[]{high,low});
+        } else {
+            thresholds.put(metric_id, new double[]{high,low});
+
+            // create intent filter
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(metric_id);
+
+            // register receiver
+            LocalBroadcastManager.getInstance(getApplication())
+                    .registerReceiver(receiver, intentFilter);
         }
-
-        thresholds.put(metric_id, new double[]{high,low});
-    }
-
-    public void addListener(String metric_id, double high, double low){
-
-        thresholds.put(metric_id, new double[]{high,low});
-
-        // create intent filter
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(metric_id);
-
-        // register receiver
-        LocalBroadcastManager.getInstance(getApplication())
-                .registerReceiver(receiver, intentFilter);
-
     }
 
     @Override

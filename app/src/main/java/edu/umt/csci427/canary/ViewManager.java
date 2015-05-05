@@ -123,7 +123,7 @@ public class ViewManager
         try
         {
             new AlertDialog.Builder(v.getContext())
-                    .setTitle("Remove Fragment")
+                    .setTitle("Remove Patient Monitor")
                     .setMessage("Do you want to remove monitor?")
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

@@ -153,16 +153,6 @@ public class MainActivity extends ActionBarActivity implements
      ****************************************/
     @Override
     public void onAttachFragment(Fragment fragment){
-        //Instantiate the list if it needs to be.
-     /*   if(attachedFragmentsList == null){
-            attachedFragmentsList = new ArrayList<>();
-        }
-            //Check to make sure the tag is not null or whitespace.
-        if(fragment != null && !fragment.getTag().isEmpty() && fragment.getTag() != null){
-            //Add this tag to the attachments list so we can find it later and remove it
-            //in the on pause, and potentially re add it onResume.
-            attachedFragmentsList.add(fragment.getTag());
-        }*/
         super.onAttachFragment(fragment);
     }
 
@@ -175,52 +165,4 @@ public class MainActivity extends ActionBarActivity implements
         // fragment by tag and communicate that data has been changed.
         ((MonitorFragment)getFragmentManager().findFragmentByTag(dialog.getMonitorTag())).setThresholdTextViews();
     }
-
-    /********************************************
-    Removes all of the fragments from the activity
-    when the onPause is called in the life cycle
-    Allows the screen to rotate without errors.
-     ********************************************/
-   /* @Override
-    public void onPause(){
-    /*    try{
-            //If the fragment list isn't null proceed in removing them all.
-            if(attachedFragmentsList != null){
-                for(String fragTag : attachedFragmentsList){
-                    //Find the fragment by tag
-                    Fragment frag = this.getFragmentManager().findFragmentByTag(fragTag);
-                    //Remove the fragment from the activity.
-                    this.getFragmentManager().beginTransaction().remove(frag).commit();
-                }//END FOR
-            }//END IF
-        }
-        catch(Exception e){
-            //Log to verbose.
-            Log.v("Canary Media Player", "Error removing all fragments from main activity on rotate || " + e.toString());
-        }//END TRY CATCH 
-        super.onPause();
-
-    }*/
-
-   /* @Override
-    public void onResume(){
-        try{
-            //If the fragment list isn't null proceed in removing them all.
-            if(attachedFragmentsList != null){
-                for(String fragTag : attachedFragmentsList){
-                    //Find the fragment by tag
-                    Fragment frag = this.getFragmentManager().findFragmentByTag(fragTag);
-                    //Remove the fragment from the activity.
-                    this.getFragmentManager().beginTransaction().add(frag, frag.getTag()).commit();
-                }//END FOR
-            }//END IF
-        }
-        catch(Exception e){
-            //Log to verbose.
-            Log.v("Canary Media Player", "Error adding all fragments from main activity on rotate || " + e.toString());
-        }//END TRY CATCH
-        super.onResume();
-    }*/
-
-
 }

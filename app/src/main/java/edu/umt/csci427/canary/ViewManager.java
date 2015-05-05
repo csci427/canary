@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +17,11 @@ import java.util.List;
 public class ViewManager
 {
     public static final int MAX_MONITORS = 4;
+    public static int MonitorCount = 0;
 
     private static HashMap<String, MonitorFragment> monitors = new HashMap<>();
     private static boolean[] openContainers = {true, true, true, true};
-    private static HashMap<Integer, String> containerMap = new HashMap<>();
+    private static HashMap<String, Integer> containerMap = new HashMap<>();
     private static int mCOUNT() { return monitors.size(); }
     private static MainActivity main;
 
@@ -30,7 +32,7 @@ public class ViewManager
         if (mCOUNT() + 1 > MAX_MONITORS)
         {
             ///show toast saying they cant add more.
-            Toast.makeText(ViewManager.main, "Maximum number of monitors already added. Cannot add more",
+            Toast.makeText(ViewManager.main, "Maximum number of monitors reached.",
                     Toast.LENGTH_SHORT).show();
         }
         else{
@@ -65,13 +67,16 @@ public class ViewManager
                 //For each monitor fragment add them to the respective layout.
                 int pos = 0;
                 for (String k : monitors.keySet()) {
-                        pos = findNextOpenPosition(pos);
-                        main.getFragmentManager().beginTransaction()
-                                .add(R.id.class.getField(layoutToPlaceMonitorIn + pos).getInt(0),
-                                        monitors.get(k), monitors.get(k).getMonitorTitle())
-                                .commit();
-                        success = true;
-                        openContainers[pos] = false;
+                        pos = numberOfMonitorsInArray - 1;//findNextOpenPosition(pos);
+                        if(openContainers[pos] == true && !monitors.get(k).isAdded()) {
+                            main.getFragmentManager().beginTransaction()
+                                    .add(R.id.class.getField(layoutToPlaceMonitorIn + pos).getInt(0),
+                                            monitors.get(k), monitors.get(k).getMonitorTitle())
+                                    .commit();
+                            success = true;
+                            openContainers[pos] = false;
+                            containerMap.put(monitors.get(k).getMonitorTitle(),pos);
+                        }
                 }
             }
             else{
@@ -106,7 +111,7 @@ public class ViewManager
                             //main.getFragmentManager().executePendingTransactions();
                         }})
                     .setNegativeButton(android.R.string.no, null).show();
-            monitors.remove(m);
+            resolveOpenContainers(m);
             //ArrangeMonitors(mCOUNT());
         }
         catch (Exception ex)
@@ -114,6 +119,20 @@ public class ViewManager
             Log.d("Canary Media Player", "Error arranging removing monitor || " + m.getTag());
         }
         return true;
+    }
+
+    public static void resolveOpenContainers(MonitorFragment monitor){
+        String monitorTitle = monitor.getMonitorTitle();
+        monitors.remove(monitor);
+        monitors.remove(monitorTitle);
+        //What if they are adding the same monitor?
+        int openContainer = containerMap.get(monitorTitle);
+        openContainers[openContainer] = true;
+        containerMap.remove(monitorTitle);
+        containerMap.remove(openContainer);
+
+
+
     }
 
 

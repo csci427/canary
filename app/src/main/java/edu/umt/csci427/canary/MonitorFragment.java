@@ -1,9 +1,7 @@
 package edu.umt.csci427.canary;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
-import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
@@ -63,6 +61,8 @@ public class MonitorFragment extends Fragment {
             thresholdsFrag.show(getFragmentManager(), "ThresholdsFragment");
         }
     }
+
+    public String getMonitorTitle() { return monitor.getTitle(); }
 
     private class monitorButtonShortListener implements View.OnClickListener
     {

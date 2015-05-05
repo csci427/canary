@@ -1,6 +1,5 @@
 package edu.umt.csci427.canary;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -13,26 +12,12 @@ import android.widget.TextView;
 
 public class oneThresholdFragment extends ThresholdFragment {
 
-    private Monitor monitor;
     private TextView lowTextView;
     private int lowThreshold; // progress on seekBar
     private int thresholdMax; // max value for seekBar
-    private AlertService alertService;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            MonitorFragment.OnMonitorFragmentInteractionListener mListener = (MonitorFragment.OnMonitorFragmentInteractionListener) activity;
-            alertService = mListener.getAlertService();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
-        }
-    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
 
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -66,13 +51,14 @@ public class oneThresholdFragment extends ThresholdFragment {
         });
 
         // set PositiveButton to set thresholds in the MainActivity
-        builder.setTitle(monitor.getTitle())
-                .setView(menuView)
-                .setPositiveButton("Set Thresholds", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        alertService.CreateOrModifyListener(monitor.getMetric_id(),Double.MAX_VALUE, (double) lowThreshold);
-                    }
-                });
+        builder.setTitle(monitor.getTitle());
+        builder.setView(menuView);
+        builder.setPositiveButton("Set Thresholds", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                mListener.onThresholdFragmentPositiveClick(oneThresholdFragment.this);
+                thresholdsSet = true;
+            }
+        });
         return builder.create();
     }
 
@@ -89,5 +75,14 @@ public class oneThresholdFragment extends ThresholdFragment {
     void setMax(int max) {
         thresholdMax = max;
     }
-}
 
+    @Override
+    int getLowThreshold() {
+        return lowThreshold;
+    }
+
+    @Override
+    int getHighThreshold() {
+        return thresholdMax;
+    }
+}

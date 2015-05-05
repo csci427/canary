@@ -22,7 +22,7 @@
         <!--<item>Simulated Multiparameter Monitor</item>-->
          <item>Simulated Noninvasive BP SYS</item>
          <item>Simulated Noninvasive BP DIA</item>
-         <item>Simulated Noninvasive BP NonInvasive</item>
+         <item>Simulated Noninvasive BP Pulse Rate</item>
          <item>Simulated Pulse Oximeter SpO2</item>
          <item>Simulated Pulse Oximeter Pulse Rate</item>
         <!--<item>Simulated Temp Probe</item>-->

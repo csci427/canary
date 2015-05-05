@@ -30,10 +30,10 @@ public class NoninvasiveBloodPressureFactory extends OpenICEAbstractFactory{
             myData = Monitor.newInstance(data, "mmHg", MDC_PRESS_CUFF_DIA.VALUE);//TODO: true should match a unique device id.
 
             // set thresholds to appropriate values
-            thresholdFragment.setDefaultThresholds(DIASYSTOLIC_HIGH, DIASYSTOLIC_LOW);
-            thresholdFragment.setMax(DIASYSTOLIC_MAX);
+            thresholdFragment.setDefaultThresholds(DIASTOLIC_HIGH, DIASTOLIC_LOW);
+            thresholdFragment.setMax(DIASTOLIC_MAX);
         }
-        else if(data != null && data.equals("Simulated Noninvasive BP pulse rate")){//comment out if you want all values to go through
+        else if(data != null && data.equals("Simulated Noninvasive BP Pulse Rate")){//comment out if you want all values to go through
             myData = Monitor.newInstance(data, "BPM", MDC_PULS_RATE_NON_INV.VALUE);//TODO: true should match a unique device id.
 
             // set thresholds to appropriate values

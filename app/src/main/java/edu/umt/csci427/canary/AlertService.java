@@ -40,7 +40,7 @@ public class AlertService extends IntentService {
             // get value from intent
             double value = intent.getDoubleExtra(OpenICE.METRIC_VALUE, -1);
 
-            Log.v("ZZZ", Double.toString(value) + " " + high + " " + low + " " + (value >= high || value <= low));
+            Log.v("ZZZ", intent.getAction() + " " + Double.toString(value) + " " + high + " " + low + " " + (value >= high || value <= low));
 
             if (value >= high || value <= low){
                 myAudioManager.requestAudioFocus(myOnAudioFocusChangeListener,

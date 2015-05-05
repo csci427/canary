@@ -19,7 +19,7 @@ public class ThresholdData {
     public static final int SYSTOLIC_BP_MAX = 300;
     public static final int SYSTOLIC_BP_HIGH = 160;
     public static final int SYSTOLIC_BP_LOW = 40;
-    public static final int DIASYSTOLIC_MAX = 400;
-    public static final int DIASYSTOLIC_HIGH = 160;
-    public static final int DIASYSTOLIC_LOW = 20;
+    public static final int DIASTOLIC_MAX = 400;
+    public static final int DIASTOLIC_HIGH = 160;
+    public static final int DIASTOLIC_LOW = 20;
 }

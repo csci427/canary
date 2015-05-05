@@ -15,13 +15,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements
-        MonitorFragment.OnMonitorFragmentInteractionListener,
-        AddMonitorFragment.AddMonitorListener {
+        AddMonitorFragment.AddMonitorListener,
+        ThresholdFragment.ThresholdFragmentListener{
 
-    AlertService mService;
-    boolean mBound = false;
-    //Will create the monitors
-    private OpenICEAbstractFactory factory = null;
+    AlertService alertService;
+    boolean alertServiceBound = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +33,6 @@ public class MainActivity extends ActionBarActivity implements
 
             ViewManager.attachMainActivity(this);
         }
-
     }
 
     @Override
@@ -54,14 +51,14 @@ public class MainActivity extends ActionBarActivity implements
                                        IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             AlertService.LocalBinder binder = (AlertService.LocalBinder) service;
-            mService = binder.getService();
-            mBound = true;
+            alertService = binder.getService();
+            alertServiceBound = true;
             Log.v("ZZZ", "Service bound");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
+            alertServiceBound = false;
         }
     };
 
@@ -111,43 +108,21 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void onFragmentInteraction()
-    {
-
-    }
-
-    @Override
-    public void launchThresholdOnClick()
-    {
-        onFragmentInteraction();
-    }
-
-    @Override
-    public AlertService getAlertService() {
-        return mService;
-    }
-
-
-
-
-    @Override
     public void onMonitorListClick(DialogFragment dialog, int which) {
 
         //Retrieve selection array
         String[] monitorSelection = getResources().getStringArray(R.array.monitor_list);
         //Create factory
-        factory = OpenICEAbstractFactory.GetSimulatedFactory(monitorSelection[which]);
+        OpenICEAbstractFactory factory = OpenICEAbstractFactory.GetSimulatedFactory(monitorSelection[which]);
 
         if(factory != null){
             //Create monitor object
             Monitor myMonitor = factory.PackageOpenICESimulatedData(monitorSelection[which]);
 
-            //Add to View Manager.
-            ViewManager.addMonitorToScreen(MonitorFragment.newInstance(myMonitor));
-
-            //Prompt user to set thresholds
-            ThresholdFragment thresholdsFrag = myMonitor.getThresholdFragment();
-            thresholdsFrag.show(getFragmentManager(), "ThresholdsFragment");
+            // create new monitorFragment
+            MonitorFragment monitorFragment = new MonitorFragment();
+            monitorFragment.setMonitor(myMonitor); // set data
+            ViewManager.addMonitorToScreen(monitorFragment);
 
         }
         else{
@@ -189,6 +164,16 @@ public class MainActivity extends ActionBarActivity implements
             attachedFragmentsList.add(fragment.getTag());
         }*/
         super.onAttachFragment(fragment);
+    }
+
+    @Override
+    public void onThresholdFragmentPositiveClick(ThresholdFragment dialog) {
+        alertService.CreateOrModifyListener(dialog.monitor.getMetric_id(),
+                dialog.getHighThreshold(), dialog.getLowThreshold());
+
+        // get the tag for the Monitor fragment stored in the thresholdFragment. Find this monitor
+        // fragment by tag and communicate that data has been changed.
+        ((MonitorFragment)getFragmentManager().findFragmentByTag(dialog.getMonitorTag())).setThresholdTextViews();
     }
 
     /********************************************

@@ -1,6 +1,5 @@
 package edu.umt.csci427.canary;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -13,24 +12,11 @@ import android.widget.TextView;
 
 public class twoThresholdFragment extends ThresholdFragment {
 
-    private Monitor monitor;
     private TextView lowTextView;
     private TextView highTextView;
     private int highThreshold; // progress on seekBar
     private int lowThreshold; // progress on seekBar
     private int thresholdMax; // max value for seekBar
-    private AlertService alertService;
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            MonitorFragment.OnMonitorFragmentInteractionListener mListener = (MonitorFragment.OnMonitorFragmentInteractionListener) activity;
-            alertService = mListener.getAlertService();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
-        }
-    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -96,7 +82,8 @@ public class twoThresholdFragment extends ThresholdFragment {
                 .setView(menuView)
                 .setPositiveButton("Set Thresholds", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        alertService.CreateOrModifyListener(monitor.getMetric_id(),(double) highThreshold, (double) lowThreshold);
+                        mListener.onThresholdFragmentPositiveClick(twoThresholdFragment.this);
+                        thresholdsSet = true;
                     }
                 });
 
@@ -116,5 +103,15 @@ public class twoThresholdFragment extends ThresholdFragment {
     @Override
     void setMax(int max) {
         thresholdMax = max;
+    }
+
+    @Override
+    int getLowThreshold() {
+        return lowThreshold;
+    }
+
+    @Override
+    int getHighThreshold() {
+        return highThreshold;
     }
 }

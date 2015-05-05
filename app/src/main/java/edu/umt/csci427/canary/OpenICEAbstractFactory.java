@@ -1,10 +1,5 @@
 package edu.umt.csci427.canary;
 
-import rosetta.MDC_ECG_HEART_RATE;
-import rosetta.MDC_PRESS_CUFF_SYS;
-import rosetta.MDC_PULS_OXIM_PULS_RATE;
-import rosetta.MDC_PULS_OXIM_SAT_O2;
-
 /**
  * Abstract Factory for simulated and real data from OpenICE
  */
@@ -28,7 +23,7 @@ public abstract class OpenICEAbstractFactory {
             return new CapnometerFactory();
         }
         else if(factoryType.equalsIgnoreCase("Simulated Noninvasive BP SYS") ||factoryType.equalsIgnoreCase("Simulated Noninvasive BP DIA")||
-                factoryType.equalsIgnoreCase("Simulated Noninvasive BP NonInvasive")){
+                factoryType.equalsIgnoreCase("Simulated Noninvasive BP Pulse Rate")){
             return new NoninvasiveBloodPressureFactory();
         }
         else if(factoryType.equalsIgnoreCase("Simulated Pulse Oximeter SpO2") ||factoryType.equalsIgnoreCase("Simulated Pulse Oximeter Pulse Rate")){

@@ -33,11 +33,17 @@ public class MonitorFragment extends Fragment {
     {
         super.onStart();
 
+
+        // register receiver for data intents
         BroadcastReceiver receiver = new OpenICEIntentReceiver(this,
                 (TextView)getView().findViewById(R.id.monitorValueTextView));
-
         LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(receiver,
                 new IntentFilter(monitor.getMetric_id()));
+
+        // register receiver for alert intents
+        BroadcastReceiver receiver1 = new AlertIntentReceiver(getView());
+        LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(receiver1,
+                new IntentFilter(monitor.getMetric_id() + AlertService.ALERT));
 
         TextView valTv;
         valTv = (TextView)getView().findViewById(R.id.monitorTitleTextView);

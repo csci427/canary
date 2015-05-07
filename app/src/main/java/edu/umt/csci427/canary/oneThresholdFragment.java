@@ -83,6 +83,6 @@ public class oneThresholdFragment extends ThresholdFragment {
 
     @Override
     int getHighThreshold() {
-        return thresholdMax;
+        return Integer.MAX_VALUE    ;
     }
 }

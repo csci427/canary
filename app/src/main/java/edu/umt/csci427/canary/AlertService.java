@@ -23,6 +23,10 @@ public class AlertService extends IntentService {
     // Binder given to clients
     private final IBinder mBinder = new LocalBinder();
 
+
+    public final static String ALERT = "status";
+    public final static String ALERT_DATA = "status";
+
     ConcurrentHashMap<String, double[]> thresholds = new ConcurrentHashMap<>();
 
     public AlertService() {super(AlertService.class.getSimpleName());}
@@ -31,8 +35,10 @@ public class AlertService extends IntentService {
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            String metricId = intent.getAction();
+
             // get threshold values
-            double[] thresholdValues = thresholds.get(intent.getAction());
+            double[] thresholdValues = thresholds.get(metricId);
 
             double high = thresholdValues[0];
             double low = thresholdValues[1];
@@ -42,10 +48,17 @@ public class AlertService extends IntentService {
 
             Log.v("ZZZ", intent.getAction() + " " + Double.toString(value) + " " + high + " " + low + " " + (value >= high || value <= low));
 
+            Intent alertIntent = new Intent(metricId + ALERT);
             if (value >= high || value <= low){
                 myAudioManager.requestAudioFocus(myOnAudioFocusChangeListener,
                         AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+                alertIntent.putExtra(ALERT_DATA, true);
+
+            } else {
+                alertIntent.putExtra(ALERT_DATA, false);
             }
+            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(alertIntent);
         }
     };
 

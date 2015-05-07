@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -28,6 +29,8 @@ public class AlertService extends IntentService {
     public final static String ALERT_DATA = "status";
 
     ConcurrentHashMap<String, double[]> thresholds = new ConcurrentHashMap<>();
+    ConcurrentHashMap<String, AlertServiceTimerTask> noDataTimers = new ConcurrentHashMap<>();
+    HashMap<String, Boolean> recieverBound = new HashMap<>();
 
     public AlertService() {super(AlertService.class.getSimpleName());}
 
@@ -37,9 +40,12 @@ public class AlertService extends IntentService {
 
             String metricId = intent.getAction();
 
+            // reset no data timer
+            AlertServiceTimerTask alertServiceTimerTask = noDataTimers.get(metricId);
+            alertServiceTimerTask.reset();
+
             // get threshold values
             double[] thresholdValues = thresholds.get(metricId);
-
             double high = thresholdValues[0];
             double low = thresholdValues[1];
 
@@ -48,6 +54,7 @@ public class AlertService extends IntentService {
 
             Log.v("ZZZ", intent.getAction() + " " + Double.toString(value) + " " + high + " " + low + " " + (value >= high || value <= low));
 
+            // broadcast status intent, used to set colors on the UI if it's currently active
             Intent alertIntent = new Intent(metricId + ALERT);
             if (value >= high || value <= low){
                 myAudioManager.requestAudioFocus(myOnAudioFocusChangeListener,
@@ -71,13 +78,25 @@ public class AlertService extends IntentService {
 
     public void CreateOrModifyListener(String metric_id, double high, double low){
 
-        // register listener if not registered, otherwise change values
-        double[] value = thresholds.get(metric_id);
-        if (value != null) {
-            thresholds.put(metric_id, new double[]{high,low});
-        } else {
-            thresholds.put(metric_id, new double[]{high,low});
+        // set threshold values
+        thresholds.put(metric_id, new double[]{high,low});
+        thresholds.put(metric_id, new double[]{high, low});
 
+        // set no data timer
+        AlertServiceTimerTask countDownTimer = noDataTimers.get(metric_id);
+        if (countDownTimer != null) {
+            AlertServiceTimerTask timerTask = noDataTimers.get(metric_id);
+            timerTask.cancel();
+            timerTask = new AlertServiceTimerTask(getApplication(), 5);
+            noDataTimers.put(metric_id, timerTask);
+        } else {
+            // create no data timer
+            AlertServiceTimerTask timerTask = new AlertServiceTimerTask(getApplication(), 5);
+            noDataTimers.put(metric_id, timerTask);
+        }
+
+        // check that receiver is registered for that intent
+        if (recieverBound.get(metric_id) == null) {
             // create intent filter
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(metric_id);

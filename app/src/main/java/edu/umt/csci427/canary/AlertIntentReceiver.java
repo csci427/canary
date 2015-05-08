@@ -22,7 +22,7 @@ public class AlertIntentReceiver extends BroadcastReceiver{
         if (intent.getBooleanExtra(AlertService.ALERT_DATA, false)) {
             view.setBackgroundColor(Color.RED);
         } else {
-            view.setBackgroundColor(Color.BLUE);
+            view.setBackgroundColor(Color.parseColor("#AA33b5e5"));
         }
     }
 }

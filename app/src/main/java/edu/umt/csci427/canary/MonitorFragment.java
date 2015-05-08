@@ -69,6 +69,7 @@ public class MonitorFragment extends Fragment {
     }
 
     public String getMonitorTitle() { return monitor.getTitle(); }
+    public String getMetricId() { return monitor.getMetric_id(); }
 
     private class monitorButtonShortListener implements View.OnClickListener
     {

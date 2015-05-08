@@ -14,6 +14,9 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import rosetta.MDC_PRESS_CUFF_DIA;
+import rosetta.MDC_PRESS_CUFF_SYS;
+
 /**
  * Created by aaron on 3/24/15.
  */
@@ -24,13 +27,14 @@ public class AlertService extends IntentService {
     // Binder given to clients
     private final IBinder mBinder = new LocalBinder();
 
-
-    public final static String ALERT = "status";
+    public final static String ALERT = "_ALERT";
     public final static String ALERT_DATA = "status";
+    public final static double NO_DATA_VALUE = Double.MIN_VALUE;
 
+    // hold
     ConcurrentHashMap<String, double[]> thresholds = new ConcurrentHashMap<>();
     ConcurrentHashMap<String, AlertServiceTimerTask> noDataTimers = new ConcurrentHashMap<>();
-    HashMap<String, Boolean> recieverBound = new HashMap<>();
+    HashMap<String, Boolean> receiverBound = new HashMap<>();
 
     public AlertService() {super(AlertService.class.getSimpleName());}
 
@@ -40,32 +44,35 @@ public class AlertService extends IntentService {
 
             String metricId = intent.getAction();
 
-            // reset no data timer
-            AlertServiceTimerTask alertServiceTimerTask = noDataTimers.get(metricId);
-            alertServiceTimerTask.reset();
+            if (receiverBound.get(metricId) != null && receiverBound.get(metricId)) {
 
-            // get threshold values
-            double[] thresholdValues = thresholds.get(metricId);
-            double high = thresholdValues[0];
-            double low = thresholdValues[1];
+                // reset no data timer
+                AlertServiceTimerTask alertServiceTimerTask = noDataTimers.get(metricId);
+                alertServiceTimerTask.reset();
 
-            // get value from intent
-            double value = intent.getDoubleExtra(OpenICE.METRIC_VALUE, -1);
+                // get threshold values
+                double[] thresholdValues = thresholds.get(metricId);
+                double high = thresholdValues[0];
+                double low = thresholdValues[1];
 
-            Log.v("ZZZ", intent.getAction() + " " + Double.toString(value) + " " + high + " " + low + " " + (value >= high || value <= low));
+                // get value from intent
+                double value = intent.getDoubleExtra(OpenICE.METRIC_VALUE, -1);
 
-            // broadcast status intent, used to set colors on the UI if it's currently active
-            Intent alertIntent = new Intent(metricId + ALERT);
-            if (value >= high || value <= low){
-                myAudioManager.requestAudioFocus(myOnAudioFocusChangeListener,
-                        AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                Log.v("ZZZ", intent.getAction() + " " + Double.toString(value) + " " + high + " " + low + " " + (value >= high || value <= low));
 
-                alertIntent.putExtra(ALERT_DATA, true);
+                // broadcast status intent, used to set colors on the UI if it's currently active
+                Intent alertIntent = new Intent(metricId + ALERT);
+                if (value >= high || value <= low) {
+                    myAudioManager.requestAudioFocus(myOnAudioFocusChangeListener,
+                            AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-            } else {
-                alertIntent.putExtra(ALERT_DATA, false);
+                    alertIntent.putExtra(ALERT_DATA, true);
+
+                } else {
+                    alertIntent.putExtra(ALERT_DATA, false);
+                }
+                LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(alertIntent);
             }
-            LocalBroadcastManager.getInstance(getApplication()).sendBroadcast(alertIntent);
         }
     };
 
@@ -76,27 +83,42 @@ public class AlertService extends IntentService {
         }
     }
 
+    public void removeListener(String metric_id){
+        receiverBound.put(metric_id,false);
+        AlertServiceTimerTask countDownTimer = noDataTimers.get(metric_id);
+        countDownTimer.cancel();
+    }
+
     public void CreateOrModifyListener(String metric_id, double high, double low){
 
         // set threshold values
         thresholds.put(metric_id, new double[]{high,low});
-        thresholds.put(metric_id, new double[]{high, low});
 
         // set no data timer
+
+        int seconds;
+        if (metric_id == MDC_PRESS_CUFF_DIA.VALUE || metric_id == MDC_PRESS_CUFF_SYS.VALUE){
+            seconds = ThresholdData.NO_DATA_TIMEOUT_BP;
+        } else {
+            seconds = ThresholdData.NO_DATA_TIMEOUT_NON_BP;
+        }
+
         AlertServiceTimerTask countDownTimer = noDataTimers.get(metric_id);
         if (countDownTimer != null) {
             AlertServiceTimerTask timerTask = noDataTimers.get(metric_id);
             timerTask.cancel();
-            timerTask = new AlertServiceTimerTask(getApplication(), 5);
+            timerTask = new AlertServiceTimerTask(seconds, metric_id,
+                    myAudioManager, myOnAudioFocusChangeListener, getApplication());
             noDataTimers.put(metric_id, timerTask);
         } else {
             // create no data timer
-            AlertServiceTimerTask timerTask = new AlertServiceTimerTask(getApplication(), 5);
+            AlertServiceTimerTask timerTask = new AlertServiceTimerTask(seconds, metric_id,
+                    myAudioManager, myOnAudioFocusChangeListener, getApplication());
             noDataTimers.put(metric_id, timerTask);
         }
 
         // check that receiver is registered for that intent
-        if (recieverBound.get(metric_id) == null) {
+        if (receiverBound.get(metric_id) == null) {
             // create intent filter
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(metric_id);
@@ -104,6 +126,10 @@ public class AlertService extends IntentService {
             // register receiver
             LocalBroadcastManager.getInstance(getApplication())
                     .registerReceiver(receiver, intentFilter);
+
+            receiverBound.put(metric_id,true);
+        } else {
+            receiverBound.put(metric_id,true);
         }
     }
 

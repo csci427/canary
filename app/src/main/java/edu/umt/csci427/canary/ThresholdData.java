@@ -22,4 +22,9 @@ public class ThresholdData {
     public static final int DIASTOLIC_MAX = 400;
     public static final int DIASTOLIC_HIGH = 160;
     public static final int DIASTOLIC_LOW = 20;
+
+    // the user should probably set values for this
+    public static final int NO_DATA_TIMEOUT_NON_BP = 15;
+    public static final int NO_DATA_TIMEOUT_BP = 4 * 60;
+
 }

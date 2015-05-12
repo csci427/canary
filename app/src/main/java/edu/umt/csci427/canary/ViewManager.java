@@ -6,12 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.rti.dds.util.ArraySequence;
-
-import java.security.KeyStore;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by robb on 4/16/15.
@@ -122,6 +117,9 @@ public class ViewManager
     {
         try
         {
+            // unregister no data listener in alert service
+            main.alertService.removeListener(m.getMetricId());
+
             new AlertDialog.Builder(v.getContext())
                     .setTitle("Remove Patient Monitor")
                     .setMessage("Do you want to remove monitor?")

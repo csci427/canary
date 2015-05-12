@@ -1,9 +1,5 @@
 # canary
 
-User interface for the Canary OpenICE media player (Android).
+Canary OpenICE media player (Android).
 
-Requires no 3rd party libraries.
-Targets API17+
-
-Author: Robb Lankston
-License: Apache 2.0
+Icon from [sweetclipart](http://sweetclipart.com/cute-yellow-canary-bird-1987) licenced under [ Attribution-NonCommercial-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-nc-sa/3.0/) licence

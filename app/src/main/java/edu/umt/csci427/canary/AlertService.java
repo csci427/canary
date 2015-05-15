@@ -64,7 +64,9 @@ public class AlertService extends IntentService {
                 Intent alertIntent = new Intent(metricId + ALERT);
                 if (value >= high || value <= low) {
                     myAudioManager.requestAudioFocus(myOnAudioFocusChangeListener,
-                            AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                    AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+                    Intent i = new Intent(context, LineService.class);
+                    stopService(i);
 
                     alertIntent.putExtra(ALERT_DATA, true);
 

@@ -1,4 +1,4 @@
-# canary
+# Canary
 
 Canary OpenICE media player. This project utilizes the [Open-Source Integrated Clinical Environment](https://www.openice.info/) to silence music in operating rooms during life critical events. A medical professional can set thresholds at which music will be silenced. For example, if a patients heart rate get's below 30 bpm or goes above 120 bpm. 
 
